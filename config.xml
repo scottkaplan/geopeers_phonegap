@@ -18,13 +18,19 @@
   </author>
 
   <gap:plugin name="org.apache.cordova.device" />
+  <gap:plugin name="org.apache.cordova.contacts" />
+  <gap:plugin name="org.apache.cordova.geolocation" />
+
+  <icon src="https://eng.geopeers.com/images/res/android/ldpi.png"  gap:platform="android" gap:qualifier="ldpi"  />
+  <icon src="https://eng.geopeers.com/images/res/android/mdpi.png"  gap:platform="android" gap:qualifier="mdpi"  />
+  <icon src="https://eng.geopeers.com/images/res/android/hdpi.png"  gap:platform="android" gap:qualifier="hdpi"  />
+  <icon src="https://eng.geopeers.com/images/res/android/xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
+  <gap:splash src="https://eng.geopeers.com/images/res/screen/android/screen-ldpi-portrait.png"  gap:platform="android" gap:qualifier="port-ldpi" />
+  <gap:splash src="https://eng.geopeers.com/images/res/screen/android/screen-mdpi-portrait.png"  gap:platform="android" gap:qualifier="port-mdpi" />
+  <gap:splash src="https://eng.geopeers.com/images/res/screen/android/screen-hdpi-portrait.png"  gap:platform="android" gap:qualifier="port-hdpi" />
+  <gap:splash src="https://eng.geopeers.com/images/res/screen/android/screen-xhdpi-portrait.png" gap:platform="android" gap:qualifier="port-xhdpi" />
 
   <platform name="android">
-    <icon src="eng.geopeers.com/images/res/android/ldpi.png" density="ldpi" />
-    <icon src="eng.geopeers.com/images/res/android/mdpi.png" density="mdpi" />
-    <icon src="eng.geopeers.com/images/res/android/hdpi.png" density="hdpi" />
-    <icon src="eng.geopeers.com/images/res/android/xhdpi.png" density="xhdpi" />
-
     <gap:splash src="eng.geopeers.com/images/res/android/screen-hdpi-landscape.png" />
     <gap:splash src="eng.geopeers.com/images/res/android/screen-hdpi-portrait.png" />
     <gap:splash src="eng.geopeers.com/images/res/android/screen-ldpi-landscape.png" />
@@ -74,4 +80,5 @@
     <gap:splash src="Default-Portrait@2x.png" gap:platform="ios" width="1536" height="2048" />
     <gap:splash src="Default-Landscape@2x.png" gap:platform="ios" width="2048" height="1536" />
   </platform>
+  <access origin="*"/>
 </widget>
