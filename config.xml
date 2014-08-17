@@ -17,7 +17,7 @@
     Scott Kaplan
   </author>
 
-  <gap:plugin name="com.phonegap.plugins.device" />
+  <gap:plugin name="org.apache.cordova.device" />
 
   <platform name="android">
     <icon src="eng.geopeers.com/images/res/android/ldpi.png" density="ldpi" />
