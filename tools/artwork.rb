@@ -6,6 +6,18 @@ include Magick
 
 ARTWORKS = [
             #
+            # default
+            #
+            { src_file:          'icon_512x512.png',
+              target_resolution: '512x512',
+              image_type:        'icon',
+            },
+            { src_file:          'splash_screen_720x1280.png',
+              target_resolution: '320x480',
+              image_type:        'splash',
+            },
+
+            #
             # iOS
             #
             { src_file:          'icon_512x512.png',
@@ -220,10 +232,10 @@ ARTWORKS = [
             },
            ]
 
-IMAGE_BASE_DIR = '/home/geopeers/phonegap/geopeers/images'
+IMAGE_BASE_DIR = '/home/geopeers/phonegap/geopeers'
 
 def process_image (image_info)
-  src_image_file = IMAGE_BASE_DIR + '/' + image_info[:src_file]
+  src_image_file = IMAGE_BASE_DIR + '/images/' + image_info[:src_file]
   src_img = Magick::Image::read(src_image_file)[0]
 
   # scale src_img down so it fits within target_resolution
@@ -245,7 +257,11 @@ def process_image (image_info)
     # place the scaled src image on top of the white background
     dst_img.composite!(src_img_scaled,CenterGravity,OverCompositeOp)
   end
-  dst_file = 'res/' + image_info[:platform] + '/' + image_info[:image_type] + '_' + image_info[:target_resolution] + File.extname(src_image_file)
+  dst_file = 'images/res/'
+  if (image_info[:platform])
+    dst_file += image_info[:platform] + '/'
+  end
+  dst_file += image_info[:image_type] + '_' + image_info[:target_resolution] + File.extname(src_image_file)
   dst_img.write(IMAGE_BASE_DIR + '/' + dst_file)
 
   if (image_info[:image_type] == 'icon')
@@ -256,7 +272,9 @@ def process_image (image_info)
     return
   end
   config_ent += " src=\"#{dst_file}\""
-  config_ent += " gap:platform=\"#{image_info[:platform]}\""
+  if (image_info[:platform])
+    config_ent += " gap:platform=\"#{image_info[:platform]}\""
+  end
   config_ent += " width=\"#{dst_width}\""
   config_ent += " height=\"#{dst_height}\""
   if (image_info[:extra_parms])
