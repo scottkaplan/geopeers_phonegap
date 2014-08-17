@@ -21,10 +21,12 @@
   <gap:plugin name="org.apache.cordova.contacts" />
   <gap:plugin name="org.apache.cordova.geolocation" />
 
+  <icon src="https://eng.geopeers.com/images/icon_512x512.png" /> <!-- default 512 pixels -->
   <icon src="https://eng.geopeers.com/images/res/android/ldpi.png" gap:platform="android" gap:density="ldpi" /> <!-- 36 pixels -->
   <icon src="https://eng.geopeers.com/images/res/android/mdpi.png" gap:platform="android" gap:density="mdpi" /> <!-- 48 pixels -->
   <icon src="https://eng.geopeers.com/images/res/android/hdpi.png" gap:platform="android" gap:density="hdpi" /> <!-- 72 pixels -->
   <icon src="https://eng.geopeers.com/images/res/android/xhdpi.png" gap:platform="android" gap:density="xhdpi" /> <!-- 96 pixels -->
+  <gap:splash src="https://eng.geopeers.com/images/res/android/screen-mdpi-portrait.png" /> <!-- default 320x480 pixels -->
   <gap:splash src="https://eng.geopeers.com/images/res/android/screen-ldpi-portrait.png" gap:platform="android" gap:density="ldpi" /> <!-- 200x320 -->
   <gap:splash src="https://eng.geopeers.com/images/res/android/screen-mdpi-portrait.png" gap:platform="android" gap:density="mdpi" /> <!-- 320x480 -->
   <gap:splash src="https://eng.geopeers.com/images/res/android/screen-hdpi-portrait.png" gap:platform="android" gap:density="hdpi" /> <!-- 480x800 -->
