@@ -20,6 +20,7 @@
   <gap:plugin name="org.apache.cordova.device" />
   <gap:plugin name="org.apache.cordova.contacts" />
   <gap:plugin name="org.apache.cordova.geolocation" />
+  <gap:plugin name="org.apache.cordova.storage" />
 
   <icon src="images/res/icon_512x512.png" width="512" height="512" />
   <gap:splash src="images/res/splash_320x480.png" width="320" height="480" />
