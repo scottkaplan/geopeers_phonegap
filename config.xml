@@ -21,11 +21,5 @@
   <gap:plugin name="nl.x-services.plugins.launchmyapp" version="3.2.0">
     <param name="URL_SCHEME" value="deeplink" />
   </gap:plugin>
-  <!-- allows redirecting to external browser with _system target -->
-  <gap:plugin name="org.apache.cordova.inappbrowser" />
-
-  <!-- just in case there is some bleed over between production and engineering server URLs, don't crap out -->
-  <access origin="*.geopeers.com" />
-
 
 </widget>
