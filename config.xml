@@ -19,7 +19,7 @@
 
   <gap:plugin name="org.apache.cordova.device" />
   <gap:plugin name="org.apache.cordova.contacts" />
-  <gap:plugin name="org.apache.cordova.geolocation" />
+  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" />
   <gap:plugin name="com.millerjames01.sqlite-plugin" />
 
   <icon src="images/res/icon_512x512.png" width="512" height="512" />
