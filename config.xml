@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<widget id          = "com.geopeers.app"
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+	xmlns:gap   = "http://phonegap.com/ns/1.0"
+	id          = "com.geopeers.app"
         versionCode = "1" 
         version     = "0.9.0" >
   <name>
@@ -14,6 +16,13 @@
     Scott Kaplan
   </author>
 
+  <gap:plugin name="org.apache.cordova.device" />
+  <gap:plugin name="org.apache.cordova.contacts" />
+  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" />
+  <gap:plugin name="com.millerjames01.sqlite-plugin" />
+  <gap:plugin name="nl.x-services.plugins.launchmyapp" version="3.2.0">
+    <param name="URL_SCHEME" value="deeplink" />
+  </gap:plugin>
   <!-- allows redirecting to external browser with _system target -->
   <gap:plugin name="org.apache.cordova.inappbrowser" />
 
