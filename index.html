@@ -16,11 +16,16 @@
           rel="stylesheet"
           href="https://eng.geopeers.com/dataTables.css" />
     <script src="https://prod1.magtogo.com/library/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>"
 
   </head>
 
   <body>
+    <div id="geopeers_config"
+	 build_id="1">
+	 version="0.7" >
+    </div>
     <div data-role="page" id="index">
       <div data-theme="a" data-role="header">
         <div class="header_content">
@@ -58,437 +63,444 @@
         </div>
       </div>
 
-      <!-- popup registration box -->
       <div id="registration_popup"
-	   data-role="popup"
-	   data-transition="fade"
-	   style="display:none"
-	   >
-	<div class="popup_frame">
-	  <div class="popup_header">
-	    Setup your Account
-	    <div class="popup_close_x"
-		 onclick="$('#registration_popup').popup('close')">
-	      <img src="https://eng.geopeers.com/images/x.png">
-	    </div>
-	  </div>
-	  <div style="font-size:18px">
-	    <div class="popup_content">
-	      <form id="registration_form">
-		<div id="registration_form_info" class="info"></div>
-		<div id="registration_form_spinner"
-		     style="display:none; text-align:center">
-		  <img src="https://eng.geopeers.com/images/ajax-loader.gif">
-		</div>
-		<div class="box_outer">
-		  <div class="box_frame">
-		    <div class="box_content">
-
-		      <div id="new_account_div" data-role="fieldcontain">
-			<fieldset data-role="controlgroup" data-type="horizontal">
-			  <legend>Is this a new account or are you already using Geopeers on another device?</legend>
-			  <label for="new_account_yes">
-			    <input type="radio" name="new_account" id="new_account_yes" value="yes" checked="checked" />
-			    New</label>
-			  <label for="new_account_no">
-			    <input type="radio" name="new_account" id="new_account_no" value="no" />
-			    Existing</label>
-			</fieldset>
-		      </div>
-		      <div id="field_label">
-			The name will be displayed with your location when you share it to others
-		      </div>
-		      <label for="name" class="ui-hidden-accessible">
-			Name
-		      </label>
-		      <input type="text"
-			     name="name"
-			     id="name"
-			     placeholder="Name"
-			     >
-		      <div id="field_label">
-			Supply your email and/or mobile to Geopeers
-			to make it easier for people to share their location with you
-			and to use Geopeers on multiple devices
-		      </div>
-		      <label for="email" class="ui-hidden-accessible">
-			Email
-		      </label>
-		      <input type="text"
-			     name="email"
-			     id="email"
-			     placeholder="fred_friendly@gmail.com"
-			     >
-		      <label for="mobile" class="ui-hidden-accessible">
-			Mobile
-		      </label>
-		      <input type="text"
-			     name="mobile"
-			     id="mobile"
-			     placeholder="415-555-1212"
-			     >
-		      <input type="hidden" name="method" value="register_device">
-		      <button class="reg_button"
-			      type="button"
-			      onclick="registration.send()">
-			Submit
-		      </button>
-		    </div>
-		  </div>
-		</div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Setup your Account
+      <div class="popup_close_x"
+	   onclick="$('#registration_popup').popup('close')">
+	<img src="https://eng.geopeers.com/images/x.png">
       </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<form id="registration_form">
+  <div id="registration_form_info" class="info"></div>
+  <div id="registration_form_spinner"
+       style="display:none; text-align:center">
+    <img src="https://eng.geopeers.com/images/ajax-loader.gif">
+  </div>
+  <div class="box_outer">
+    <div class="box_frame">
+      <div class="box_content">
 
-      <!-- popup download link -->
+	<div id="new_account_div" data-role="fieldcontain">
+	  <fieldset data-role="controlgroup" data-type="horizontal">
+	    <legend>Is this a new account or are you already using Geopeers on another device?</legend>
+	    <label for="new_account_yes">
+	      <input type="radio" name="new_account" id="new_account_yes" value="yes" checked="checked" />
+	      New</label>
+	    <label for="new_account_no">
+	      <input type="radio" name="new_account" id="new_account_no" value="no" />
+	      Existing</label>
+	  </fieldset>
+	</div>
+	<div id="field_label">
+	  The name will be displayed with your location when you share it to others
+	</div>
+	<label for="name" class="ui-hidden-accessible">
+	  Name
+	</label>
+	<input type="text"
+	       name="name"
+	       id="name"
+	       placeholder="Name"
+	       >
+	<div id="field_label">
+	  Supply your email and/or mobile to Geopeers
+	  to make it easier for people to share their location with you
+	  and to use Geopeers on multiple devices
+	</div>
+	<label for="email" class="ui-hidden-accessible">
+	  Email
+	</label>
+	<input type="text"
+	       name="email"
+	       id="email"
+	       placeholder="fred_friendly@gmail.com"
+	       >
+	<label for="mobile" class="ui-hidden-accessible">
+	  Mobile
+	</label>
+	<input type="text"
+	       name="mobile"
+	       id="mobile"
+	       placeholder="415-555-1212"
+	       >
+	<input type="hidden" name="method" value="register_device">
+	<button class="reg_button"
+		type="button"
+		onclick="registration.send()">
+	  Submit
+	</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
       <div id="download_link_popup"
-	   data-role="popup"
-	   data-transition="fade"
-	   style="display:none"
-	   >
-	<div class="popup_frame">
-	  <div class="popup_header">
-	    Send Download Link
-	    <div class="popup_close_x"
-		 onclick="$('#download_link_popup').popup('close')">
-	      <img src="https://eng.geopeers.com/images/x.png">
-	    </div>
-	  </div>
-	  <div style="font-size:18px">
-	    <div class="popup_content">
-	      <form id="download_link_form">
-		<div id="download_link_form_info" class="info"></div>
-		<div id="download_link_form_spinner"
-		     style="display:none; text-align:center">
-		  <img src="https://eng.geopeers.com/images/ajax-loader.gif">
-		</div>
-		<div class="box_outer">
-		  <div class="box_frame">
-		    <div class="box_content">
-		      <div id="field_label">
-			You need a native app to share your location and
-			there isn't a native app available for your device.
-			We can send a link to download the app.
-			Supply an email and/or mobile to send the link to.
-		      </div>
-		      <label for="email" class="ui-hidden-accessible">
-			Email
-		      </label>
-		      <input type="text"
-			     name="email"
-			     id="email"
-			     placeholder="fred_friendly@gmail.com"
-			     >
-		      <label for="mobile" class="ui-hidden-accessible">
-			Mobile
-		      </label>
-		      <input type="text"
-			     name="mobile"
-			     id="mobile"
-			     placeholder="415-555-1212"
-			     >
-		      <input type="hidden" name="method" value="send_download_link">
-		      <button class="reg_button"
-			      type="button"
-			      onclick="download.send_link()">
-			Send Download Link
-		      </button>
-		    </div>
-		  </div>
-		</div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Send Download Link
+      <div class="popup_close_x"
+	   onclick="$('#download_link_popup').popup('close')">
+	<img src="https://eng.geopeers.com/images/x.png">
       </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<form id="download_link_form">
+  <div id="download_link_form_info" class="info"></div>
+  <div id="download_link_form_spinner"
+       style="display:none; text-align:center">
+    <img src="https://eng.geopeers.com/images/ajax-loader.gif">
+  </div>
+  <div class="box_outer">
+    <div class="box_frame">
+      <div class="box_content">
+	<div id="field_label">
+	  You need a native app to share your location and
+	  there isn't a native app available for your device.
+	  We can send a link to download the app.
+	  Supply an email and/or mobile to send the link to.
+	</div>
+	<label for="email" class="ui-hidden-accessible">
+	  Email
+	</label>
+	<input type="text"
+	       name="email"
+	       id="email"
+	       placeholder="fred_friendly@gmail.com"
+	       >
+	<label for="mobile" class="ui-hidden-accessible">
+	  Mobile
+	</label>
+	<input type="text"
+	       name="mobile"
+	       id="mobile"
+	       placeholder="415-555-1212"
+	       >
+	<input type="hidden" name="method" value="send_download_link">
+	<button class="reg_button"
+		type="button"
+		onclick="download.send_link()">
+	  Send Download Link
+	</button>
+      </div>
+    </div>
+  </div>
+</form>
 
-      <!-- popup download type -->
+      </div>
+    </div>
+  </div>
+</div>
+
       <div id="download_type_popup"
-	   data-role="popup"
-	   data-transition="fade"
-	   style="display:none"
-	   >
-	<div class="popup_frame">
-	  <div class="popup_header">
-	    Download Native App
-	    <div class="popup_close_x"
-		 onclick="$('#download_type_popup').popup('close')">
-	      <img src="https://eng.geopeers.com/images/x.png">
-	    </div>
-	  </div>
-	  <div style="font-size:18px">
-	    <div class="popup_content">
-	      <form id="download_type_form">
-		<div id="download_type_form_info" class="info"></div>
-		<div id="download_type_form_spinner"
-		     style="display:none; text-align:center">
-		  <img src="https://eng.geopeers.com/images/ajax-loader.gif">
-		</div>
-		<div class="box_outer">
-		  <div class="box_frame">
-		    <div class="box_content">
-		      <div id="field_label">
-			It doesn't look like we have a native app for your device.
-			You can still download the app file,
-			but you probably won't be able to run it on the device you are on.
-		      </div>
-		      <div id="client_type" data-role="fieldcontain">
-			<fieldset data-role="controlgroup" data-type="vertical">
-			  <legend>
-			    The native app is specific to a device.
-			    What device do you want the native app for?
-			  </legend>
-
-			  <label for="client_type_ios" style="margin-right:10px">
-			    <input type="radio" name="client_type" id="client_type_ios" value="ios" />
-			    iOS (iPhone/iPad)
-			  </label>
-
-			  <label for="client_type_android">
-			    <input type="radio" name="client_type" id="client_type_android" value="android" />
-			    Android
-			  </label>
-			</fieldset>
-		      </div>
-		      <button class="reg_button"
-			      type="button"
-			      onclick="download.download_app_direct()">
-			Download App
-		      </button>
-		    </div>
-		  </div>
-		</div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Download Native App
+      <div class="popup_close_x"
+	   onclick="$('#download_type_popup').popup('close')">
+	<img src="https://eng.geopeers.com/images/x.png">
       </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<form id="download_type_form">
+  <div id="download_type_form_info" class="info"></div>
+  <div id="download_type_form_spinner"
+       style="display:none; text-align:center">
+    <img src="https://eng.geopeers.com/images/ajax-loader.gif">
+  </div>
+  <div class="box_outer">
+    <div class="box_frame">
+      <div class="box_content">
+	<div id="field_label">
+	  It doesn't look like we have a native app for your device.
+	  You can still download the app file,
+	  but you probably won't be able to run it on the device you are on.
+	</div>
+	<div id="client_type" data-role="fieldcontain">
+	  <fieldset data-role="controlgroup" data-type="vertical">
+	    <legend>
+	      The native app is specific to a device.
+	      What device do you want the native app for?
+	    </legend>
 
-      <!-- popup share_location box -->
+	    <label for="client_type_ios" style="margin-right:10px">
+	      <input type="radio" name="client_type" id="client_type_ios" value="ios" />
+	      iOS (iPhone/iPad)
+	    </label>
+
+	    <label for="client_type_android">
+	      <input type="radio" name="client_type" id="client_type_android" value="android" />
+	      Android
+	    </label>
+	  </fieldset>
+	</div>
+	<button class="reg_button"
+		type="button"
+		onclick="download.download_app_direct()">
+	  Download App
+	</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
       <div id="share_location_popup"
-	   data-role="popup"
-	   data-transition="fade"
-	   style="display:none"
-	   >
-        <div class="popup_frame">
-	  <div class="popup_header">
-	    Share your Location
-	    <div class="popup_close_x"
-		 onclick="$('#share_location_popup').popup('close')">
-	      <img src="https://eng.geopeers.com/images/x.png">
-	    </div>
-	  </div>
-	  <div class="popup_content">
-	    <form id="share_location_form">
-	      <div id="share_location_form_info" class="info"></div>
-	      <div id="share_location_form_spinner" style="text-align:center; display:none">
-		<img src="https://eng.geopeers.com/images/ajax-loader.gif">
-	      </div>
-	      <div class="box_outer" id="share_via" style="display:none">
-		<div class="box_title">
-		  Share via:
-		</div>
-		<div class="box_frame">
-		  <div class="box_content">
-		    <select name="share_via" style="padding:5px" id="share_via">
-		      <option value="email">Email</option>
-		      <option value="sms">Text/SMS Message</option>
-		      <!--
-			 <option value="twitter">Twitter</option>
-		      <option value="facebook">Facebook</option>
-		      -->
-		    </select>
-
-		    <label for="share_to" class="ui-hidden-accessible">Share To</label>
-		    <input type="text"
-			   name="share_to"
-			   id="share_to"
-			   placeholder="Share To"
-			   style="padding:5px"
-			   >
-		  </div>
-		</div>
-	      </div>
-	      <div class="box_outer" id="share_with" style="display:none">
-		<div class="box_frame">
-		  <div class="box_content" style="font-size:18px; font-weight:bold; text-align:center">
-		    Share with 
-		    <span id="share_account_name">
-		    </span>
-		    <input type="hidden" name="seer_device_id">
-		  </div>
-		</div>
-	      </div>
-	      <div class="box_outer">
-		<div class="box_title">
-		  Share how long?
-		</div>
-		<div class="box_frame">
-		  <div class="box_content">
-		    <div style="width:28%; float:left; margin-left:3px; padding-top:3px">
-		      <input type="text"
-			     name="share_duration_number"
-			     id="share_duration_number"
-			     value="1"
-			     placeholder="number"
-			     >
-		    </div>
-		    <div style="width:68%; float:right; margin-right:3px">
-		      <select name="share_duration_unit">
-			<option value="minute">minute</option>
-			<option value="hour" selected>hour</option>
-			<option value="day">day</option>
-			<option value="week">week</option>
-			<option value="manual">forever</option>
-		      </select>
-		    </div>
-		    <div style="clear:both"></div>
-		  </div>
-		</div>
-	      </div>
-	      <div class="box_outer">
-		<div class="box_title">
-		  Add Message (Optional):
-		</div>
-		<div class="box_frame">
-		  <div class="box_content">
-		    <input type="text"
-			   name="share_message"
-			   id="share_message"
-			   placeholder="Type a message"
-			   >
-		  </div>
-		</div>
-	      </div>
-	      <input type="hidden" name="method" value="share_location">
-	      <button style="background-color:#3eb1dd; color:white; text-shadow:0 0; font-weight:normal"
-		      type="button"
-		      onclick="share_location()">Send</button>
-	    </form>
-	  </div>
-	</div>
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Share your Location
+      <div class="popup_close_x"
+	   onclick="$('#share_location_popup').popup('close')">
+	<img src="https://eng.geopeers.com/images/x.png">
       </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<form id="share_location_form">
+  <div id="share_location_form_info" class="info"></div>
+  <div id="share_location_form_spinner" style="text-align:center; display:none">
+    <img src="https://eng.geopeers.com/images/ajax-loader.gif">
+  </div>
+  <div class="box_outer" id="share_via" style="display:none">
+    <div class="box_title">
+      Share via:
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<select name="share_via" style="padding:5px" id="share_via">
+	  <option value="email">Email</option>
+	  <option value="sms">Text/SMS Message</option>
+	  <!--
+	     <option value="twitter">Twitter</option>
+	  <option value="facebook">Facebook</option>
+	  -->
+	</select>
 
-      <!-- popup support box -->
-      <div id="support_form_popup"
-	   data-role="popup"
-	   data-transition="fade"
-	   style="display:none"
-	   >
-        <div class="popup_frame">
-	  <div class="popup_header">
-	    Make Us Better
-	    <div class="popup_close_x"
-		 onclick="$('#support_form_popup').popup('close')">
-	      <img src="https://eng.geopeers.com/images/x.png">
-	    </div>
-	  </div>
-	  <div class="popup_content">
-	    <form id="support_form">
-	      <div id="support_form_info" class="info"></div>
-	      <div id="support_form_spinner" style="text-align:center; display:none">
-		<img src="https://eng.geopeers.com/images/ajax-loader.gif">
-	      </div>
-	      <div class="box_outer">
-		<div class="box_title">
-		  Help!
-		</div>
-		<div class="box_frame">
-		  <div class="box_content">
-		    <label for="support_form_problem"
-			   class="ui-hidden-accessible">
-		      What went wrong
-		    </label>
-		    <input type="text"
-			   name="support_form_problem"
-			   id="support_form_problem"
-			   placeholder="This is what happened..."
-			   style="padding:5px"
-			   >
-		    <label for="support_form_reproduction"
-			   class="ui-hidden-accessible">
-		      How I did it
-		    </label>
-		    <input type="text"
-			   name="support_form_reproduction"
-			   id="support_form_reproduction"
-			   placeholder="...when I did this"
-			   style="padding:5px"
-			   >
-		  </div>
-		</div>
-	      </div>
-	      <div class="box_outer">
-		<div class="box_title">
-		  It would be great if it did this
-		</div>
-		<div class="box_frame">
-		  <div class="box_content">
-		    <label for="support_form_feature"
-			   class="ui-hidden-accessible">
-		      How I did it
-		    </label>
-		    <input type="text"
-			   name="support_form_feature"
-			   id="support_form_feature"
-			   placeholder="got a push notification when I got a new share"
-			   style="padding:5px"
-			   >
-		  </div>
-		</div>
-	      </div>
-	      <div class="box_outer">
-		<div class="box_title">
-		  I found a cool use for Geopeers
-		</div>
-		<div class="box_frame">
-		  <div class="box_content">
-		    <label for="support_form_cool_use"
-			   class="ui-hidden-accessible">
-		      I used it for:
-		    </label>
-		    <input type="text"
-			   name="support_form_cool_use"
-			   id="support_form_cool_use"
-			   placeholder="keep track of my parked car"
-			   style="padding:5px"
-			   >
-		  </div>
-		</div>
-	      </div>
-	      <input type="hidden" name="method" value="send_support">
-	      <button style="background-color:#3eb1dd; color:white; text-shadow:0 0; font-weight:normal"
-		      type="button"
-		      onclick="send_support()">Send</button>
-	    </form>
-	  </div>
-	</div>
+	<label for="share_to" class="ui-hidden-accessible">Share To</label>
+	<input type="text"
+	       name="share_to"
+	       id="share_to"
+	       placeholder="Share To"
+	       style="padding:5px"
+	       >
       </div>
+    </div>
+  </div>
+  <div class="box_outer" id="share_with" style="display:none">
+    <div class="box_frame">
+      <div class="box_content" style="font-size:18px; font-weight:bold; text-align:center">
+	Share with 
+	<span id="share_account_name">
+	</span>
+	<input type="hidden" name="seer_device_id">
+      </div>
+    </div>
+  </div>
+  <div class="box_outer">
+    <div class="box_title">
+      Share how long?
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<div style="width:28%; float:left; margin-left:3px; padding-top:3px">
+	  <input type="text"
+		 name="share_duration_number"
+		 id="share_duration_number"
+		 value="1"
+		 placeholder="number"
+		 >
+	</div>
+	<div style="width:68%; float:right; margin-right:3px">
+	  <select name="share_duration_unit">
+	    <option value="minute">minute</option>
+	    <option value="hour" selected>hour</option>
+	    <option value="day">day</option>
+	    <option value="week">week</option>
+	    <option value="manual">forever</option>
+	  </select>
+	</div>
+	<div style="clear:both"></div>
+      </div>
+    </div>
+  </div>
+  <div class="box_outer">
+    <div class="box_title">
+      Add Message (Optional):
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<input type="text"
+	       name="share_message"
+	       id="share_message"
+	       placeholder="Type a message"
+	       >
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="method" value="share_location">
+  <button style="background-color:#3eb1dd; color:white; text-shadow:0 0; font-weight:normal"
+	  type="button"
+	  onclick="share_location()">Send</button>
+</form>
 
-      <!-- popup share management box -->
-      <div id="manage_popup"
-	   data-transition="fade"
-	   data-role="popup"
-	   style="display:none"
-	   >
-	<div class="popup_frame">
-	  <div class="popup_header">
-	    Manage your Shared Locations
-	    <div class="popup_close_x"
-		 onclick="$('#manage_popup').popup('close')">
-	      <img src="https://eng.geopeers.com/images/x.png">
-	    </div>
-	  </div>
-	  <div class="popup_content">
-	    <div id="manage_form_spinner" style="text-align:center; display:none">
-	      <img src="https://eng.geopeers.com/images/ajax-loader.gif">
-	    </div>
-	    <div id="manage_info" style="padding:5px"></div>
-	  </div>
-	</div>
       </div>
+    </div>
+  </div>
+</div>
+
+      <div id="support_popup"
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Make Us Better
+      <div class="popup_close_x"
+	   onclick="$('#support_popup').popup('close')">
+	<img src="https://eng.geopeers.com/images/x.png">
+      </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<form id="support_form">
+  <div id="support_form_info" class="info"></div>
+  <div id="support_form_spinner" style="text-align:center; display:none">
+    <img src="https://eng.geopeers.com/images/ajax-loader.gif">
+  </div>
+  <div class="box_outer">
+    <div class="box_title">
+      Help!
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<label for="support_form_problem"
+	       class="ui-hidden-accessible">
+	  What went wrong
+	</label>
+	<input type="text"
+	       name="support_form_problem"
+	       id="support_form_problem"
+	       placeholder="This is what happened..."
+	       style="padding:5px"
+	       >
+	<label for="support_form_reproduction"
+	       class="ui-hidden-accessible">
+	  How I did it
+	</label>
+	<input type="text"
+	       name="support_form_reproduction"
+	       id="support_form_reproduction"
+	       placeholder="...when I did this"
+	       style="padding:5px"
+	       >
+      </div>
+    </div>
+  </div>
+  <div class="box_outer">
+    <div class="box_title">
+      It would be great if it did this
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<label for="support_form_feature"
+	       class="ui-hidden-accessible">
+	  How I did it
+	</label>
+	<input type="text"
+	       name="support_form_feature"
+	       id="support_form_feature"
+	       placeholder="got a push notification when I got a new share"
+	       style="padding:5px"
+	       >
+      </div>
+    </div>
+  </div>
+  <div class="box_outer">
+    <div class="box_title">
+      I found a cool use for Geopeers
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<label for="support_form_cool_use"
+	       class="ui-hidden-accessible">
+	  I used it for:
+	</label>
+	<input type="text"
+	       name="support_form_cool_use"
+	       id="support_form_cool_use"
+	       placeholder="keep track of my parked car"
+	       style="padding:5px"
+	       >
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="method" value="send_support">
+  <button style="background-color:#3eb1dd; color:white; text-shadow:0 0; font-weight:normal"
+	  type="button"
+	  onclick="send_support()">Send</button>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div id="share_management_popup"
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Manage your Shared Locations
+      <div class="popup_close_x"
+	   onclick="$('#share_management_popup').popup('close')">
+	<img src="https://eng.geopeers.com/images/x.png">
+      </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<div id="manage_form_spinner" style="text-align:center; display:none">
+  <img src="https://eng.geopeers.com/images/ajax-loader.gif">
+</div>
+<div id="manage_info" style="padding:5px"></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
       <!-- map -->
       <div data-role="content" id="content">
@@ -509,12 +521,12 @@
 	<li>
 	  <ul id="navContainer">
 	    <div id="share_location_menu_item">
-	      <li>
-		<a onclick="marker_mgr.popup_share_location()">
-		  Share your location with 
-		  <span class="menu_account_name"></span>
-		</a>
-	      </li>
+	    <li>
+	      <a onclick="marker_mgr.popup_share_location()">
+		Share your location with 
+		<span class="menu_account_name"></span>
+	      </a>
+	    </li>
 	    </div>
 	    <hr>
 	    <li>
