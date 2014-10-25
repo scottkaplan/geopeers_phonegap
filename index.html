@@ -23,7 +23,7 @@
 
   <body>
     <div id="geopeers_config"
-	 build_id="3"
+	 build_id="4"
 	 version="0.7" >
     </div>
     <div data-role="page" id="index">
@@ -315,13 +315,17 @@
 	  </div>
 	</div>
 
-	<div>
+	<div id="or_div">
 	  - or -
 	</div>
 
 	<div id="manual_share_via">
-	  <input type="radio" name="share_via" value="mobile">Text/SMS Message<br>
-	  <input type="radio" name="share_via" value="email">Email
+	  <label for="share_via_mobile">
+	    <input type="radio" name="share_via" value="mobile">Text/SMS Message
+	  </label>
+	  <label for="share_via_email">
+	    <input type="radio" name="share_via" value="email">Email
+	  </label>
 	</div>
 
 	<div id="manual_share_to">
