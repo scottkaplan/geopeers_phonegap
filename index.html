@@ -23,7 +23,7 @@
 
   <body>
     <div id="geopeers_config"
-	 build_id="2"
+	 build_id="3"
 	 version="0.7" >
     </div>
     <div data-role="page" id="index">
@@ -297,23 +297,42 @@
     </div>
     <div class="box_frame">
       <div class="box_content">
-	<select name="share_via" style="padding:5px" id="share_via">
-	  <option value="contacts">Select from My Contacts</option>
-	  <option value="email">Email</option>
-	  <option value="mobile">Text/SMS Message</option>
-	  <!--
-	  <option value="twitter">Twitter</option>
-	  <option value="facebook">Facebook</option>
-	  -->
-	</select>
 
-	<label for="share_to" class="ui-hidden-accessible">Share To</label>
-	<input type="text"
-	       name="share_to"
-	       id="share_to"
-	       placeholder="Share To"
-	       style="padding:5px"
-	       >
+	<div id="my_contacts_button">
+	  <button onclick="select_contact()">
+	    Select from My Contacts
+	  </button>
+	</div>
+
+	<div id="my_contacts_display" style="display:none">
+	  <div>
+	    <span>Email</span>
+	    <span id="my_contacts_email"></span>
+	  </div>
+	  <div>
+	    <span>Mobile</span>
+	    <span id="my_contacts_mobile"></span>
+	  </div>
+	</div>
+
+	<div>
+	  - or -
+	</div>
+
+	<div id="manual_share_via">
+	  <input type="radio" name="share_via" value="mobile">Text/SMS Message<br>
+	  <input type="radio" name="share_via" value="email">Email
+	</div>
+
+	<div id="manual_share_to">
+	  <label for="share_to" class="ui-hidden-accessible">Share To</label>
+	  <input type="text"
+		 name="share_to"
+		 id="share_to"
+		 placeholder="Share To"
+		 style="padding:5px"
+		 >
+	</div>
       </div>
     </div>
   </div>
