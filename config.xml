@@ -20,7 +20,6 @@
   <gap:plugin name="org.apache.cordova.contacts" />
 
   <gap:plugin name="org.apache.cordova.dialogs" />
-  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" />
   <!--
   -->
   <gap:plugin name="com.millerjames01.sqlite-plugin" />
@@ -29,6 +28,7 @@
   </gap:plugin>
   <!-- allows redirecting to external browser with _system target -->
   <gap:plugin name="org.apache.cordova.inappbrowser" />
+  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" />
 
   <access origin="*" />
 
