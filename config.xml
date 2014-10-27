@@ -16,7 +16,7 @@
     Scott Kaplan
   </author>
 
-  <preference name="phonegap-version" value="3.6.0" />
+  <preference name="phonegap-version" value="3.5.0" />
 
   <gap:plugin name="org.apache.cordova.device" />
   <gap:plugin name="org.apache.cordova.contacts" />
