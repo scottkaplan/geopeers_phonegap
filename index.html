@@ -23,7 +23,7 @@
 
   <body>
     <div id="geopeers_config"
-	 build_id="15"
+	 build_id="16"
 	 version="0.7" >
     </div>
     <div data-role="page" id="index">
@@ -47,6 +47,12 @@
 			 alt="Icon">
 		    <ul id="navContainer">
 		      <li>
+			<a onclick="main_page_share_location_popup()">
+			  Share Location
+			</a>
+		      </li>
+		      <hr>
+		      <li>
 			<a onclick="manage_shares()">
 			  View Shares
 			</a>
@@ -65,7 +71,7 @@
 		      </li>
 		      <hr>
 		      <li>
-			<a onclick="send_native_app_wrapper()">
+			<a onclick="download_app_wrapper()" id="download_onclick">
 			  <div id="native_app_prompt">
 			    Get Native App
 			  </div>
@@ -114,6 +120,7 @@
     <div class="box_frame">
       <div class="box_content">
 
+	<!-- 
 	<div id="new_account_div" data-role="fieldcontain">
 	  <fieldset data-role="controlgroup" data-type="horizontal">
 	    <legend>Is this a new account or are you already using Geopeers on another device?</legend>
@@ -125,6 +132,7 @@
 	      Existing</label>
 	  </fieldset>
 	</div>
+	-->
 	<div id="field_label">
 	  The name will be displayed with your location when you share it to others
 	</div>
@@ -235,7 +243,7 @@
   </div>
 </div>
 
-      <div id="download_type_popup"
+      <div id="download_app_popup"
      data-role="popup"
      data-transition="fade"
      style="display:none"
@@ -244,15 +252,15 @@
     <div class="popup_header">
       Download Native App
       <div class="popup_close_x"
-	   onclick="$('#download_type_popup').popup('close')">
+	   onclick="$('#download_app_popup').popup('close')">
 	<img src="https://eng.geopeers.com/images/x.png">
       </div>
     </div>
     <div style="font-size:18px">
       <div class="popup_content">
-	<form id="download_type_form">
-  <div id="download_type_form_info" class="info"></div>
-  <div id="download_type_form_spinner"
+	<form id="download_app_form">
+  <div id="download_app_form_info" class="info"></div>
+  <div id="download_app_form_spinner"
        style="display:none; text-align:center">
     <img src="https://eng.geopeers.com/images/ajax-loader.gif">
   </div>
@@ -260,32 +268,12 @@
     <div class="box_frame">
       <div class="box_content">
 	<div id="field_label">
-	  It doesn't look like we have a native app for your device.
-	  You can still download the app file,
-	  but you probably won't be able to run it on the device you are on.
-	</div>
-	<div id="client_type" data-role="fieldcontain">
-	  <fieldset data-role="controlgroup" data-type="vertical">
-	    <legend>
-	      The native app is specific to a device.
-	      What device do you want the native app for?
-	    </legend>
-
-	    <label for="client_type_ios" style="margin-right:10px">
-	      <input type="radio" name="client_type" id="client_type_ios" value="ios" />
-	      iOS (iPhone/iPad)
-	    </label>
-
-	    <label for="client_type_android">
-	      <input type="radio" name="client_type" id="client_type_android" value="android" />
-	      Android
-	    </label>
-	  </fieldset>
+	  You need a native app to share your location.
 	</div>
 	<button class="reg_button"
 		type="button"
-		onclick="download.download_app_direct()">
-	  Download App
+		onclick="download.download_redirect()">
+	  Download Native App
 	</button>
       </div>
     </div>
