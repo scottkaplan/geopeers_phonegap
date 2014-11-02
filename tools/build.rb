@@ -47,10 +47,10 @@ end
 def update_phonegap_repo
   cmd = "cd #{Phonegap_dir}; git commit -a -m 'Phonegap'"
   puts cmd
-  `cmd`
+  `#{cmd}`
   cmd = "cd #{Phonegap_dir}; git push"
   puts cmd
-  `cmd`
+  `#{cmd}`
 end
 
 def build
