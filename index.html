@@ -14,7 +14,7 @@
 	  href="css/geo.css" />
     <link type="text/css"
           rel="stylesheet"
-          href="css/dataTables.css" />
+          href="css/jquery.dataTables.css" />
     <script src="js/jquery-1.11.1.min.js"></script>
 
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
@@ -23,7 +23,7 @@
 
   <body>
     <div id="geopeers_config"
-	 build_id="20"
+	 build_id="21"
 	 version="0.7" >
     </div>
     <div data-role="page" id="index">
@@ -271,6 +271,48 @@
   </div>
 </div>
 
+      <div id="update_app_popup"
+     data-role="popup"
+     data-transition="fade"
+     style="display:none"
+     >
+  <div class="popup_frame">
+    <div class="popup_header">
+      Update Native App
+      <div class="popup_close_x"
+	   onclick="$('#update_app_popup').popup('close')">
+	<img src="images/x.png">
+      </div>
+    </div>
+    <div style="font-size:18px">
+      <div class="popup_content">
+	<form id="update_app_form">
+  <div id="update_app_form_info" class="info"></div>
+  <div id="update_app_form_spinner"
+       style="display:none; text-align:center">
+    <img src="images/ajax-loader.gif">
+  </div>
+  <div class="box_outer">
+    <div class="box_frame">
+      <div class="box_content">
+	<div id="field_label">
+	  A newer version of this app is available
+	</div>
+	<button class="reg_button"
+		type="button"
+		onclick="download.download_redirect()">
+	  Download and Install Updated App
+	</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
       <div id="share_location_popup"
      data-role="popup"
      data-transition="fade"
@@ -291,6 +333,33 @@
   <div id="share_location_form_spinner" style="text-align:center; display:none">
     <img src="images/ajax-loader.gif">
   </div>
+
+  <div class="box_outer" id="account_name_box" style="display:none">
+    <div class="box_title">
+      Account Name
+    </div>
+    <div class="box_frame">
+      <div class="box_content" style="text-align:center">
+
+	Because you haven't provided a name yet,
+	your share pin will have the label 'Anonymous'.
+	<p />
+	You can supply any label to appear with your pin.
+	<p />
+	You can change this name on the Account Settings popup from the main menu.
+	<div>
+	  <label for="account_name" class="ui-hidden-accessible">Account Name</label>
+	  <input type="text"
+		 name="account_name"
+		 id="account_name"
+		 placeholder="Fred Friendly"
+		 style="padding:5px"
+		 >
+	</div>
+      </div>
+    </div>
+  </div>
+
   <div class="box_outer" id="share_via" style="display:none">
     <div class="box_title">
       Share via:
@@ -579,7 +648,7 @@
       </ul>
       </div>
 
-    <script src="js/jquery-ui.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script src="js/jquery.ui.map.js"></script>
 
@@ -587,7 +656,7 @@
     <script src="js/markerwithlabel.js"></script>
 
     <script src="js/md5.js"></script>
-    <script src="js/dataTables.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
     <script src="js/jquery-ui-timepicker-addon.js"></script>
     <script src="js/jstz.min.js"></script>
     <script src="js/db.js"></script>
