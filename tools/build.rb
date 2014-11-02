@@ -31,16 +31,20 @@ def pull_webapp
 end
 
 def copy_local_assets
-  for asset_type in ['css', 'images', 'js']
-    # clear out the local assets in the phonegap repo
-    # Don't just rm -rf the directory since we want to save the repo info
-    phonegap_repo = "#{Phonegap_dir}/#{asset_type}"
-    phonegap_files = Dir.glob("#{phonegap_repo}/*")
-    FileUtils.rm_r (phonegap_files)
+  for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android', 'css', 'js']
+    puts asset_type
+    phonegap_subdir = "#{Phonegap_dir}/#{asset_type}"
+    Dir.foreach (phonegap_subdir) { |filename|
+      phonegap_pathname = "#{phonegap_subdir}/#{filename}"
+      next if File.directory?(phonegap_pathname)
 
-    webapp_repo = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}"
-    webapp_files = Dir.glob("#{webapp_repo}/*")
-    FileUtils.cp_r(webapp_files, phonegap_repo)
+      # clear out the local assets in the phonegap repo
+      # Don't just rm -rf the directory since we want to save the repo info
+      FileUtils.rm (phonegap_pathname)
+
+      webapp_file = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}/#{filename}"
+      FileUtils.cp(webapp_file, phonegap_pathname)
+    }
   end
 end
 
