@@ -46,20 +46,23 @@ end
 
 def update_phonegap_repo
   cmd = "cd #{Phonegap_dir}; git commit -a -m 'Phonegap'"
-  puts cmd
   `#{cmd}`
   cmd = "cd #{Phonegap_dir}; git push"
-  puts cmd
   `#{cmd}`
 end
 
 def build
+  puts "Write index.html"
   write_index_html()
+  puts "Edit config XML"
   edit_config_xml()
+  puts "Pull webapp repo"
   pull_webapp()
+  puts "Copy local assets"
   copy_local_assets()
+  puts "Update Phonegap repo"
   update_phonegap_repo()
+  puts "Done"
 end
 
-# build()
-update_phonegap_repo
+build()
