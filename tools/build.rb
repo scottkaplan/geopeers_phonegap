@@ -51,7 +51,9 @@ end
 def update_phonegap_repo
   cmd = "cd #{Phonegap_dir}; git commit -a -m 'Phonegap'"
   `#{cmd}`
-  cmd = "cd #{Phonegap_dir}; git push"
+  github_rep = 'https://scott@kaplans.com:scottkaplan1@github.com/scottkaplan/geopeers'
+  cmd = "cd #{Phonegap_dir}; git push #{github_rep}"
+  puts cmd
   `#{cmd}`
 end
 
