@@ -68,6 +68,12 @@ def build
   copy_local_assets()
   puts "Update Phonegap repo"
   update_phonegap_repo()
+
+  # unlock phonegap certs
+  # start phonegap build and wait
+  # download ios and apk to distribution server
+  # upload apk to Google Play
+  
   puts "Done"
 end
 
