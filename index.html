@@ -28,7 +28,7 @@
 
   <body>
     <div id="geopeers_config"
-	 build_id="54"
+	 build_id="55"
 	 version="0.7" >
     </div>
     <div data-role="page" id="index">
@@ -569,7 +569,19 @@
       </div>
     </div>
   </div>
+  <div class="box_outer">
+    <div class="box_title">
+      Version
+    </div>
+    <div class="box_frame">
+      <div class="box_content">
+	<div id="support_version"></div>
+      </div>
+    </div>
+  </div>
+
   <input type="hidden" name="method" value="send_support">
+  <input type="hidden" name="support_version">
   <button style="background-color:#3eb1dd; color:white; text-shadow:0 0; font-weight:normal"
 	  type="button"
 	  onclick="send_support()">Send</button>
@@ -598,7 +610,7 @@
 	<div id="manage_form_spinner" style="text-align:center; display:none">
   <img src="https://prod.geopeers.com/images/ajax-loader.gif">
 </div>
-<div id="manage_msg" style="text-align:center; font-weight:bold; padding:5px"></div>
+<div id="manage_msg" style="text-align:center; font-size:16px; font-weight:bold; color: purple; padding:5px"></div>
 <div id="manage_info" style="padding:5px"></div>
 
       </div>
