@@ -6,6 +6,7 @@ require 'git'
 require 'fileutils'
 
 Phonegap_dir = "/home/geopeers/phonegap/geopeers"
+Webapp_dir   = "/home/geopeers/sinatra/geopeers"
 
 def write_index_html
   html = create_index({is_phonegap: true})
@@ -31,7 +32,7 @@ def pull_webapp
 end
 
 def copy_local_assets
-  for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android', 'css', 'js']
+  for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android']
     puts asset_type
     phonegap_subdir = "#{Phonegap_dir}/#{asset_type}"
     Dir.foreach (phonegap_subdir) { |filename|
@@ -46,6 +47,11 @@ def copy_local_assets
       FileUtils.cp(webapp_file, phonegap_pathname)
     }
   end
+  # make sure JS and CSS files are refreshed
+  js_file  = "#{Webapp_dir}/public/js/geopeers.min.js"
+  FileUtils.cp(js_file,  "#{phonegap_subdir}/js")
+  css_file = "#{Webapp_dir}/public/css/geopeers.css"
+  FileUtils.cp(css_file, "#{phonegap_subdir}/css")
 end
 
 def update_phonegap_repo
