@@ -33,20 +33,18 @@ end
 
 def copy_local_assets
   for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android']
-    puts "\n"
     puts asset_type
     phonegap_subdir = "#{Phonegap_dir}/#{asset_type}"
-    Dir.foreach (phonegap_subdir) { |filename|
+    webapp_subdir = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}"
+    Dir.foreach (webapp_subdir) { |filename|
       phonegap_pathname = "#{phonegap_subdir}/#{filename}"
       next if File.directory?(phonegap_pathname)
-      next unless File.exists?(phonegap_pathname)
-      puts filename
 
       # clear out the local assets in the phonegap repo
       # Don't just rm -rf the directory since we want to save the repo info
-      FileUtils.rm (phonegap_pathname)
+      FileUtils.rm (phonegap_pathname) if File.exists? (phonegap_pathname)
 
-      webapp_file = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}/#{filename}"
+      webapp_file = "#{webapp_subdir}/#{filename}"
       FileUtils.cp(webapp_file, phonegap_pathname)
     }
   end
