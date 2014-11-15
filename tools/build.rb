@@ -33,12 +33,13 @@ end
 
 def copy_local_assets
   for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android']
+    puts "\n"
     puts asset_type
     phonegap_subdir = "#{Phonegap_dir}/#{asset_type}"
     Dir.foreach (phonegap_subdir) { |filename|
       phonegap_pathname = "#{phonegap_subdir}/#{filename}"
-      puts phonegap_pathname
       next if File.directory?(phonegap_pathname)
+      next unless File.exists?(phonegap_pathname)
       puts filename
 
       # clear out the local assets in the phonegap repo
