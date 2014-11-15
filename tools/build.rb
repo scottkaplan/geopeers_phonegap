@@ -35,7 +35,9 @@ def copy_local_assets
   for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android']
     puts asset_type
     phonegap_subdir = "#{Phonegap_dir}/#{asset_type}"
+    puts phonegap_subdir
     Dir.foreach (phonegap_subdir) { |filename|
+      puts filename
       phonegap_pathname = "#{phonegap_subdir}/#{filename}"
       next if File.directory?(phonegap_pathname)
 
@@ -44,6 +46,7 @@ def copy_local_assets
       FileUtils.rm (phonegap_pathname)
 
       webapp_file = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}/#{filename}"
+      puts webapp_file
       FileUtils.cp(webapp_file, phonegap_pathname)
     }
   end

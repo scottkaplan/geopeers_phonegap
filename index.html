@@ -10,7 +10,7 @@
     <title>
       Geopeers
     </title>
-    <!--
+    
     <link type="text/css"
 	  rel="stylesheet"
 	  href="https://prod.geopeers.com/css/jquery.mobile-1.4.5.min.css" />
@@ -20,15 +20,7 @@
     <link type="text/css"
           rel="stylesheet"
           href="https://prod.geopeers.com/css/jquery.dataTables.css" />
-    -->
-    <link type="text/css"
-	  rel ="stylesheet"
-	  href="https://prod.geopeers.com/css/geopeers.css" />
-
     <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
-    <script src="https://prod.geopeers.com/js/geopeers.min.js"></script>
-
-    <!--
     <script src="https://prod.geopeers.com/js/jquery-1.11.1.js"></script>
     <script src="https://prod.geopeers.com/js/jquery-ui.js"></script>
     <script src="https://prod.geopeers.com/js/jquery.mobile-1.4.5.js"></script>
@@ -42,20 +34,26 @@
     <script src="https://prod.geopeers.com/js/menu.js"></script>
     <script src="https://prod.geopeers.com/js/geo.js"></script>
     <script src="https://prod.geopeers.com/js/gps.js"></script>
-    -->
-    <script>start();</script>
+    
 
-
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    
+    <script src="cordova.js" type="text/javascript" charset="utf-8"></script>
+    
 
   </head>
 
   <body>
     <div id="geopeers_config"
-	 build_id="59"
+	 build_id="62"
 	 version="0.7" >
     </div>
-    <div data-role="page" id="index">
+    <div id="gps_spinner"
+	 style="text-align:center; display:block">
+      <div style="font-size:24px; font-weight:bold; padding-bottom:36px">Loading...</div>
+      <img src="https://prod.geopeers.com/images/gps-satellites.gif" width="300" height="245">
+    </div>
+
+    <div data-role="page" id="index" style="display:none">
       <div data-theme="a" data-role="header">
         <div class="header_content">
           <div id="header_title" class="overlap_div">
@@ -65,6 +63,8 @@
           <div class="overlap_div">
             <div id="flying_pin" class="icon_div">
               <img src="https://prod.geopeers.com/images/pin_wings.png"
+		   width="50"
+		   height="37"
                    class="icon_img"
                    onclick="main_page_share_location_popup()">
             </div>
@@ -73,6 +73,8 @@
 		<ul class="no-js">
 		  <li>
 		    <img src="https://prod.geopeers.com/images/mobile-menu-icon.png"
+			 width="38"
+			 height="38"
 			 alt="Icon">
 		    <ul id="navContainer">
 		      <li>
@@ -134,7 +136,10 @@
       Setup your Account
       <div class="popup_close_x"
 	   onclick="$('#registration_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
@@ -143,7 +148,10 @@
   <div id="registration_form_info" class="info"></div>
   <div id="registration_form_spinner"
        style="display:none; text-align:center">
-    <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+    <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+	 >
   </div>
   <div class="box_outer">
     <div class="box_frame">
@@ -206,7 +214,10 @@
       Send Download Link
       <div class="popup_close_x"
 	   onclick="$('#download_link_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
@@ -215,7 +226,10 @@
   <div id="download_link_form_info" class="info"></div>
   <div id="download_link_form_spinner"
        style="display:none; text-align:center">
-    <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+    <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+	 >
   </div>
   <div class="box_outer">
     <div class="box_frame">
@@ -268,7 +282,10 @@
       Download Native App
       <div class="popup_close_x"
 	   onclick="$('#download_app_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
@@ -277,7 +294,10 @@
   <div id="download_app_form_info" class="info"></div>
   <div id="download_app_form_spinner"
        style="display:none; text-align:center">
-    <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+    <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+	 >
   </div>
   <div class="box_outer">
     <div class="box_frame">
@@ -310,7 +330,10 @@
       Update Native App
       <div class="popup_close_x"
 	   onclick="$('#update_app_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
@@ -319,7 +342,10 @@
   <div id="update_app_form_info" class="info"></div>
   <div id="update_app_form_spinner"
        style="display:none; text-align:center">
-    <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+    <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+	 >
   </div>
   <div class="box_outer">
     <div class="box_frame">
@@ -352,7 +378,10 @@
       Share your Location
       <div class="popup_close_x"
 	   onclick="$('#share_location_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
@@ -360,7 +389,10 @@
 	<form id="share_location_form">
   <div id="share_location_form_info" class="info"></div>
   <div id="share_location_form_spinner" style="text-align:center; display:none">
-    <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+    <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+	 >
   </div>
 
   <div class="box_outer" id="account_name_box" style="display:none">
@@ -516,7 +548,10 @@
       Make Us Better
       <div class="popup_close_x"
 	   onclick="$('#support_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
@@ -524,7 +559,10 @@
 	<form id="support_form">
   <div id="support_form_info" class="info"></div>
   <div id="support_form_spinner" style="text-align:center; display:none">
-    <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+    <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+	 >
   </div>
   <div class="box_outer">
     <div class="box_title">
@@ -626,13 +664,19 @@
       Manage your Shared Locations
       <div class="popup_close_x"
 	   onclick="$('#share_management_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png">
+	<img src="https://prod.geopeers.com/images/x.png"
+	     width="16"
+	     height="16"
+	     >
       </div>
     </div>
     <div style="font-size:18px">
       <div class="popup_content">
 	<div id="manage_form_spinner" style="text-align:center; display:none">
-  <img src="https://prod.geopeers.com/images/ajax-loader.gif">
+  <img src="https://prod.geopeers.com/images/ajax-loader.gif"
+	 width="220"
+	 height="19"
+       >
 </div>
 <div id="manage_msg" style="text-align:center; font-size:16px; font-weight:bold; color: purple; padding:5px"></div>
 <div id="manage_info" style="padding:5px"></div>
@@ -647,10 +691,6 @@
 	<!-- map -->
         <div id="map_canvas"
              style="height:100%">       <!-- this has to be here or JQM will override -->
-	  <div id="gps_spinner"
-	       style="text-align:center; display:none">
-	    <img src="https://prod.geopeers.com/images/gps-satellites.gif">
-	  </div>
         </div>
       </div>
     </div>
@@ -688,7 +728,7 @@
 	</li>
       </ul>
     </div>
-
+    <script>start();</script>
   </body>
 
 </html>
