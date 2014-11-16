@@ -100,8 +100,6 @@ def copy_local_assets
 
       phonegap_filename = "#{phonegap_subdir}/#{filename}"
 
-      puts phonegap_filename
-      puts webapp_filename
       FileUtils.cp(webapp_filename, phonegap_filename)
     }
   end
