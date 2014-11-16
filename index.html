@@ -27,7 +27,7 @@
 
   <body>
     <div id="geopeers_config"
-	 build_id="89"
+	 build_id="90"
 	 version="0.7" >
     </div>
 
@@ -409,13 +409,15 @@
 	<div id="my_contacts_display" style="display:none; font-size:20px">
 	  <div>
 	    <div style="float:left">Email</div>
-	    <div style="float:left; font-weight:bold; margin-left: 5px" id="my_contacts_email"></div>
+	    <div id="my_contacts_email" style="float:left; font-weight:bold; margin-left: 5px"></div>
+	    <select id="my_contacts_email_dropdown" style="float:left; display:none"></select>
 	    <div style="clear:both"></div>
 	    <input type="hidden" name="my_contacts_email">
 	  </div>
 	  <div>
 	    <div style="float:left">Mobile</div>
 	    <div style="float:left; font-weight:bold; margin-left: 5px" id="my_contacts_mobile"></div>
+	    <select id="my_contacts_mobile_dropdown" style="float:left; display:none"></select>
 	    <div style="clear:both"></div>
 	    <input type="hidden" name="my_contacts_mobile">
 	  </div>
@@ -426,7 +428,10 @@
 	</div>
 
 	<div style="text-align:center; width:100%">
-	  <fieldset data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" data-mini="true">
+	  <fieldset data-role="controlgroup"
+		    data-type="horizontal"
+		    data-role="fieldcontain"
+		    data-mini="true">
 	    <div id="manual_share_via">
 	      <label for="share_via_mobile">
 		<input type="radio" name="share_via" value="mobile" id="share_via_mobile">
