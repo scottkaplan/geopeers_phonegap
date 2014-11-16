@@ -50,9 +50,9 @@ def copy_local_assets
   end
   # make sure JS and CSS files are refreshed
   js_file  = "#{Webapp_dir}/public/js/geopeers.min.js"
-  FileUtils.cp(js_file,  "#{phonegap_subdir}/js")
+  FileUtils.cp(js_file,  "#{Phonegap_dir}/js")
   css_file = "#{Webapp_dir}/public/css/geopeers.css"
-  FileUtils.cp(css_file, "#{phonegap_subdir}/css")
+  FileUtils.cp(css_file, "#{Phonegap_dir}/css")
 end
 
 def update_phonegap_repo
