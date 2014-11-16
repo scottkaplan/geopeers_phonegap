@@ -9,7 +9,7 @@ Phonegap_dir = "/home/geopeers/phonegap/geopeers"
 Webapp_dir   = "/home/geopeers/sinatra/geopeers"
 
 def write_index_html
-  html = create_index({is_phonegap: true})
+  html = create_index({is_phonegap: true, is_production: true})
   output_file = "#{Phonegap_dir}/index.html"
   File.open(output_file, 'w') { |file| file.write(html) }
 end
