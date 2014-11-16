@@ -79,6 +79,7 @@ end
 def pull_webapp
   remote_rep = 'https://scott:scott_kaplan@magtogo.gitsrc.com/git/geopeers.git'
   local_rep = "#{Phonegap_dir}/webapp"
+  FileUtils.rm_r Dir.glob("#{local_rep}/*")
   cmd = "cd #{local_rep}; rm -rf *; git clone #{remote_rep}"
   puts cmd
   result = `#{cmd}`
