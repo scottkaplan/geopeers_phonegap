@@ -4,11 +4,64 @@ require '/home/geopeers/sinatra/geopeers/geo.rb'
 # require 'github_api'
 require 'git'
 require 'fileutils'
+require 'uglifier'
 
 Phonegap_dir = "/home/geopeers/phonegap/geopeers"
 Webapp_dir   = "/home/geopeers/sinatra/geopeers"
 
-def write_index_html
+def create_concat_file (dir, type, files=nil)
+  master_filename = "geopeers.#{type}"
+  master_pathname = "#{dir}/#{master_filename}"
+  if ! files
+    files = []
+    Dir.foreach(dir) { |filename|
+      next if /^geopeers\..*/.match(filename)
+      next if File.directory?(filename)
+      files.push (filename)
+    }
+  end
+  master_file = File.open(master_pathname, 'w')
+  files.each { |filename|
+    f = File.open("#{dir}/#{filename}")
+    master_file.write (f.read)
+    f.close
+  }
+  master_file.close
+end
+
+def write_file (pathname, contents)
+  f = File.open(pathname, "w")
+  f.write (contents)
+  f.close
+end
+
+def js
+  type = 'js'
+  dir = "#{Webapp_dir}/public/#{type}"
+  files = ['jquery-1.11.1.js', 'jquery-ui.js', 'jquery.mobile-1.4.5.js',
+           'jquery.ui.map.js', 'markerwithlabel.js', 'md5.js',
+           'jquery.dataTables.js', 'jquery-ui-timepicker-addon.js',
+           'jstz.js', 'db.js', 'menu.js', 'geo.js', 'gps.js']
+  create_concat_file(dir, type, files)
+
+  master_pathname = "#{dir}/geopeers.#{type}"
+  uglified, source_map = Uglifier.new.compile_with_map(File.read(master_pathname))
+
+  master_min_filename = "geopeers.min.#{type}"
+  write_file("#{dir}/#{master_min_filename}", uglified)
+
+  master_map_filename = "geopeers.min.map"
+  write_file("#{dir}/#{master_map_filename}", source_map)
+end
+
+def css
+  type = 'css'
+  dir = "#{Webapp_dir}/public/#{type}"
+  files = ['jquery.mobile-1.4.5.min.css', 'geo.css', 'jquery.dataTables.css']
+  create_concat_file(dir, type, files)
+end
+
+def write_phonegap_index_html
   html = create_index({is_phonegap: true, is_production: true})
   output_file = "#{Phonegap_dir}/index.html"
   File.open(output_file, 'w') { |file| file.write(html) }
@@ -65,8 +118,12 @@ def update_phonegap_repo
 end
 
 def build
-  puts "Write index.html"
-  write_index_html()
+  puts "Write Phonegap index.html"
+  write_phonegap_index_html()
+  puts "Create integrated/minified JS"
+  js()
+  puts "Create integrated/minified CSS"
+  css()
   puts "Edit config XML"
   edit_config_xml()
   puts "Pull webapp repo"
