@@ -79,7 +79,6 @@ end
 def pull_webapp
   remote_rep = 'https://scott:scott_kaplan@magtogo.gitsrc.com/git/geopeers.git'
   local_rep = "#{Phonegap_dir}/webapp"
-  FileUtils.rm_r Dir.glob("#{local_rep}/*")
   cmd = "cd #{local_rep}; rm -rf *; git clone #{remote_rep}"
   puts cmd
   result = `#{cmd}`
@@ -88,18 +87,22 @@ end
 def copy_local_assets
   for asset_type in ['images', 'images/res', 'images/res/ios', 'images/res/android']
     puts asset_type
+
     phonegap_subdir = "#{Phonegap_dir}/#{asset_type}"
+    FileUtils.rm_r phonegap_subdir if File.exists? phonegap_subdir
+    FileUtils.mkdir phonegap_subdir
+
     webapp_subdir = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}"
+
     Dir.foreach (webapp_subdir) { |filename|
-      phonegap_pathname = "#{phonegap_subdir}/#{filename}"
-      next if File.directory?(phonegap_pathname)
+      webapp_filename = "#{webapp_subdir}/#{filename}"
+      next if File.directory?(webapp_filename)
 
-      # clear out the local assets in the phonegap repo
-      # Don't just rm -rf the directory since we want to save the repo info
-      FileUtils.rm (phonegap_pathname) if File.exists? (phonegap_pathname)
+      phonegap_filename = "#{phonegap_subdir}/#{filename}"
 
-      webapp_file = "#{webapp_subdir}/#{filename}"
-      FileUtils.cp(webapp_file, phonegap_pathname)
+      puts phonegap_filename
+      puts webapp_filename
+      FileUtils.cp(webapp_filename, phonegap_filename)
     }
   end
   # make sure JS and CSS files are refreshed
