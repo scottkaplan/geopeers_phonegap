@@ -65,7 +65,7 @@ def css
 end
 
 def write_phonegap_index_html
-  html = create_index({is_phonegap: true, is_production: true})
+  html = create_index({is_phonegap: true, is_production: false})
   output_file = "#{Phonegap_dir}/index.html"
   File.open(output_file, 'w') { |file| file.write(html) }
 end
