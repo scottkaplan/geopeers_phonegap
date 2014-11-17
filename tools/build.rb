@@ -43,7 +43,7 @@ def js
            'jquery.ui.map.js', 'markerwithlabel.js', 'md5.js',
            'jquery.dataTables.js', 'jquery-ui-timepicker-addon.js',
            'jstz.js', 'db.js', 'menu.js', 'gps.js',
-           'geo.js',
+#           'geo.js',
           ]
   create_concat_file(dir, type, files)
 
@@ -55,6 +55,9 @@ def js
 
   master_map_filename = "geopeers.min.map"
   write_file("#{dir}/#{master_map_filename}", source_map)
+
+  FileUtils.cp("#{dir}/geo.js", "#{Phonegap_dir}/#{type}")
+
 end
 
 def css
@@ -65,7 +68,7 @@ def css
 end
 
 def write_phonegap_index_html
-  html = create_index({is_phonegap: true, is_production: false})
+  html = create_index({is_phonegap: true, is_production: true})
   output_file = "#{Phonegap_dir}/index.html"
   File.open(output_file, 'w') { |file| file.write(html) }
 end
