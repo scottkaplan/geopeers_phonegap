@@ -26,8 +26,17 @@
   </head>
 
   <body>
+    <div id="gps_spinner"
+	 style="text-align:center; display:block">
+      <div style="font-size:24px; font-weight:bold; padding-bottom:36px">
+	Loading...
+      </div>
+      <img src="images/gps-satellites.gif"
+	   width="300"
+	   height="245">
+    </div>
     <div id="geopeers_config"
-	 build_id="95"
+	 build_id="96"
 	 version="0.7" >
     </div>
 
@@ -689,11 +698,6 @@
 	<!-- map -->
         <div id="map_canvas"
              style="height:100%">       <!-- this has to be here or JQM will override -->
-	  <div id="gps_spinner"
-	       style="text-align:center; display:block">
-	    <div style="font-size:24px; font-weight:bold; padding-bottom:36px">Loading...</div>
-	    <img src="images/gps-satellites.gif" width="300" height="245">
-	  </div>
         </div>
       </div>
     </div>
