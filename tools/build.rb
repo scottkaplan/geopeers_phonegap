@@ -13,6 +13,7 @@ def create_concat_file (dir, type, files=nil)
   master_filename = "geopeers.#{type}"
   master_pathname = "#{dir}/#{master_filename}"
   if ! files
+    # collect all the files (! dirs) in dir
     files = []
     Dir.foreach(dir) { |filename|
       next if /^geopeers\..*/.match(filename)
