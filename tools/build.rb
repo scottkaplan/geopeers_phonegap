@@ -42,7 +42,7 @@ def js
            'jquery.ui.map.js', 'markerwithlabel.js', 'md5.js',
            'jquery.dataTables.js', 'jquery-ui-timepicker-addon.js',
            'jstz.js', 'db.js', 'menu.js', 'gps.js',
-#           'geo.js',
+           'geo.js',
           ]
   create_concat_file(dir, type, files)
 
