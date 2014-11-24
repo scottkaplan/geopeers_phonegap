@@ -81,7 +81,7 @@ function display_alert_message () {
 	var message_type = 'message_info';
 	break;
     case "DEVICE_REGISTERED":
-        var message = getParameterByName('account_name') + "has been registered.";
+        var message = getParameterByName('account_name') + " has been registered.";
 	var message_type = 'message_success';
 	break;
     case "SHARES_XFERED":
@@ -1646,6 +1646,12 @@ var init_geo = {
 	if (getParameterByName('download_app')) {
 	    download.download_app();
 	}
+
+	// we have one of these in the heartbeat
+	// but that won't happen for 60 sec
+	// schedule one in 10 sec to clean up any messes
+	// caused by initialization stragglers
+	setTimeout(update_map_canvas_pos, 5000);
     },
     show_popups: function () {
 	['registration_popup', 'download_link_popup', 'download_app_popup', 'update_app_popup',
