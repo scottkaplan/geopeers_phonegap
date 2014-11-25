@@ -28,6 +28,7 @@ def create_concat_file (dir, type, files=nil)
     f.close
   }
   master_file.close
+  puts "Wrote #{master_pathname}"
 end
 
 def write_file (pathname, contents)
