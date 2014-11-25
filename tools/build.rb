@@ -23,13 +23,11 @@ def create_concat_file (dir, type, files=nil)
   end
   master_file = File.open(master_pathname, 'w')
   files.each { |filename|
-    puts "In: #{dir}/#{filename}"
     f = File.open("#{dir}/#{filename}")
     master_file.write (f.read)
     f.close
   }
   master_file.close
-  puts "Wrote #{master_pathname}"
 end
 
 def write_file (pathname, contents)
