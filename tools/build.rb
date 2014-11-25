@@ -7,7 +7,7 @@ require 'fileutils'
 require 'uglifier'
 
 Phonegap_dir = "/home/geopeers/phonegap/geopeers"
-Webapp_dir   = "/home/geopeers/sinatra/geopeers"
+Webapp_dir   = "#{Phonegap_dir}/webapp"
 
 def create_concat_file (dir, type, files=nil)
   master_filename = "geopeers.#{type}"
@@ -23,6 +23,7 @@ def create_concat_file (dir, type, files=nil)
   end
   master_file = File.open(master_pathname, 'w')
   files.each { |filename|
+    puts "In: #{dir}/#{filename}"
     f = File.open("#{dir}/#{filename}")
     master_file.write (f.read)
     f.close
@@ -39,7 +40,7 @@ end
 
 def js
   type = 'js'
-  dir = "#{Webapp_dir}/public/#{type}"
+  dir = "#{Webapp_dir}/geopeers/public/#{type}"
   files = ['jquery-1.11.1.js', 'jquery-ui.js', 'jquery.mobile-1.4.5.js',
            'jquery.ui.map.js', 'markerwithlabel.js', 'md5.js',
            'jquery.dataTables.js', 'jquery-ui-timepicker-addon.js',
@@ -63,7 +64,7 @@ end
 
 def css
   type = 'css'
-  dir = "#{Webapp_dir}/public/#{type}"
+  dir = "#{Webapp_dir}/geopeers/public/#{type}"
   files = ['jquery.mobile-1.4.5.min.css', 'geo.css', 'jquery.dataTables.css']
   create_concat_file(dir, type, files)
 end
@@ -85,8 +86,7 @@ end
 
 def pull_webapp
   remote_rep = 'https://scott:scott_kaplan@magtogo.gitsrc.com/git/geopeers.git'
-  local_rep = "#{Phonegap_dir}/webapp"
-  cmd = "cd #{local_rep}; rm -rf *; git clone #{remote_rep}"
+  cmd = "cd #{Webapp_dir}; rm -rf *; git clone #{remote_rep}"
   puts cmd
   result = `#{cmd}`
 end
@@ -111,9 +111,9 @@ def copy_local_assets
     }
   end
   # make sure JS and CSS files are refreshed
-  js_file  = "#{Webapp_dir}/public/js/geopeers.min.js"
+  js_file  = "#{Webapp_dir}/geopeers/public/js/geopeers.min.js"
   FileUtils.cp(js_file,  "#{Phonegap_dir}/js")
-  css_file = "#{Webapp_dir}/public/css/geopeers.css"
+  css_file = "#{Webapp_dir}/geopeers/public/css/geopeers.css"
   FileUtils.cp(css_file, "#{Phonegap_dir}/css")
 end
 
@@ -127,6 +127,8 @@ def update_phonegap_repo
 end
 
 def build
+  puts "Pull webapp repo"
+  pull_webapp()
   puts "Write Phonegap index.html"
   write_phonegap_index_html()
   puts "Create integrated/minified JS"
@@ -135,8 +137,6 @@ def build
   css()
   puts "Edit config XML"
   edit_config_xml()
-  puts "Pull webapp repo"
-  pull_webapp()
   puts "Copy local assets"
   copy_local_assets()
   puts "Update Phonegap repo"
