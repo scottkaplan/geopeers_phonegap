@@ -22,6 +22,7 @@
   <gap:plugin name="org.apache.cordova.contacts" />
   <gap:plugin name="org.apache.cordova.dialogs" />
   <gap:plugin name="com.millerjames01.sqlite-plugin" />
+  <gap:plugin name="net.yoik.cordova.plugins.screenorientation" />
   <gap:plugin name="nl.x-services.plugins.launchmyapp">
     <param name="URL_SCHEME" value="geopeers" />
   </gap:plugin>
