@@ -57,7 +57,6 @@ def js
   write_file("#{dir}/#{master_map_filename}", source_map)
 
   FileUtils.cp("#{dir}/geo.js", "#{Phonegap_dir}/#{type}")
-
 end
 
 def css
@@ -82,11 +81,17 @@ def edit_config_xml
   File.open(config_xml_file, 'w') { |file| file.write(config_xml) }
 end
 
+def run_cmd cmd
+  puts cmd
+  result = `#{cmd}`
+  puts result
+  result
+end
+
 def pull_webapp
   remote_rep = 'https://scott:scott_kaplan@magtogo.gitsrc.com/git/geopeers.git'
   cmd = "cd #{Webapp_dir}; rm -rf *; git clone #{remote_rep}"
-  puts cmd
-  result = `#{cmd}`
+  run_cmd (cmd)
 end
 
 def copy_local_assets
@@ -113,15 +118,21 @@ def copy_local_assets
   FileUtils.cp(js_file,  "#{Phonegap_dir}/js")
   css_file = "#{Webapp_dir}/geopeers/public/css/geopeers.css"
   FileUtils.cp(css_file, "#{Phonegap_dir}/css")
+
+  # upload to production
+  cmd = "cd #{Phonegap_dir}; /usr/bin/scp -i /home/geopeers/.ssh/geopeers css/geopeers.css geopeers.com:src/css"
+  run_cmd cmd
+  cmd = "cd #{Phonegap_dir}; /usr/bin/scp -i /home/geopeers/.ssh/geopeers js/geopeers.min.js geopeers.com:src/js"
+  run_cmd cmd
 end
 
 def update_phonegap_repo
   cmd = "cd #{Phonegap_dir}; git commit -a -m 'Phonegap'"
-  `#{cmd}`
+  run_cmd cmd
   github_rep = 'https://scott@kaplans.com:scottkaplan1@github.com/scottkaplan/geopeers'
   puts "Username is 'scott@kaplans.com', password is 'scottkaplan1'"
   cmd = "cd #{Phonegap_dir}; git push"
-  `#{cmd}`
+  run_cmd cmd
 end
 
 def build
