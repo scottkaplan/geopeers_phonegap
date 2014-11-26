@@ -60,45 +60,55 @@ function update_map_canvas_pos () {
     return;
 }
 
-function display_alert_message () {
-    var alert_method = getParameterByName('alert_method');
+function display_alert_message (alert_method, message) {
+    // this is called either
+    // 1) 'alert_method=<alert_method>' as a URL parm
+    // 2) called as JS, typically injected at the bottom of index.html
+    
+    if (! alert_method) {
+	alert_method = getParameterByName('alert_method');
+    }
     if (! alert_method) {
 	return;
     }
     var message_type = getParameterByName('message_type') ? getParameterByName('message_type') : 'message_error';
-
+    var (message);
     switch (alert_method) {
     case "SUPPORT_CONTACTED":
-	var message = "There was a problem with your request.  Support has been contacted.";
-	var message_type = 'message_error';
+	message = "There was a problem with your request.  Support has been contacted.";
+	message_type = 'message_error';
 	break;
     case "CRED_INVALID":
-	var message = "That credential is not valid.  You can't view the location.  You can still use the other features of GeoPeers";
-	var message_type = 'message_warning';
+	message = "That credential is not valid.  You can't view the location.  You can still use the other features of GeoPeers";
+	message_type = 'message_warning';
 	break;
     case "DEVICE_ADDED":
-        var message = getParameterByName('auth_key') + " is used by " + getParameterByName('account_name') + ".  Your device has been added to this account.";
-	var message_type = 'message_info';
+        message = getParameterByName('auth_key') + " is used by " + getParameterByName('account_name') + ".  Your device has been added to this account.";
+	message_type = 'message_info';
 	break;
     case "DEVICE_REGISTERED":
-        var message = getParameterByName('account_name') + " has been registered.";
-	var message_type = 'message_success';
+        message = getParameterByName('account_name') + " has been registered.";
+	message_type = 'message_success';
 	break;
     case "SHARES_XFERED":
-	var message = "Your shared locations have been transferred to the native app";
-	message += "<p>You can switch to the native app from the main menu";
-	var message_type = 'message_success';
+	message = "Your shared locations have been transferred to the native app";
+	message += "<p>Switch to the native app from the main menu";
+	message_type = 'message_success';
 	break;
     case "SHARES_XFERED_COUNTDOWN":
-        var message = "Your shared locations have been transferred to the native app";
+        message = "Your shared locations have been transferred to the native app";
 	message += "<p><div class='message_button' onclick='native_app_redirect_wrapper()'><div class='message_button_text'>Go to native app</div></div>";
-	message += "<p><span>You will be switched automatically in </span><span id='countdown_native_app_redirect' style='font-size:18px'>6</span><script>device_id_bind.countdown_native_app_redirect()</script>";
-	var message_type = 'message_success';
+	message += "<p><span>You will be switched automatically in </span>";
+	message += "<span id='countdown_native_app_redirect' style='font-size:18px'>6</span>";
+	message += "<script>device_id_bind.countdown_native_app_redirect()</script>";
+	message_type = 'message_success';
 	break;
     case "SHARES_XFERED_MSG":
-	var message = getParameterByName('message');
+	if (! message) {
+	    message = getParameterByName('message');
+	}
 	message += "<p>You can switch to the native app from the main menu";
-	var message_type = 'message_warning';
+	message_type = 'message_warning';
 	break;
     }
     var message_div_id = display_message(message, message_type);
@@ -1128,9 +1138,10 @@ function format_time (time) {
 					   minute: date.getMinutes()});
     }
     var time_zone_str = /\((.*)\)/.exec(date.toTimeString())[0];
-    var matches = time_zone_str.match(/\b(\w)/g);
-    var time_zone_acronym = matches.join('');
-    time_str += ' ' + time_zone_acronym;
+    // var matches = time_zone_str.match(/\b(\w)/g);
+    // var time_zone_acronym = matches.join('');
+    // time_str += ' ' + time_zone_acronym;
+    time_str += ' ' + time_zone_str;
     return (time_str);
 }
 
@@ -1154,37 +1165,21 @@ function is_orientation (requested_orientation) {
 }
 
 function manage_shares_callback (data, textStatus, jqXHR) {
-    // create markup for a table, loaded with data
-    // table is of the form:
-    // <table>
-    //   <thead>
-    //     <tr><th>...</th><th>...</th>...
-    //   </thead>
-    //   <tbody>
-    //     <tr><td>...</td><td>...</td>...
-    //   </tbody>
-    // </table>
-    var table = $('<table></table>').attr('id','manage_table').addClass('display');
-    var head = $('<tr></tr>');
-    head.append($('<th></th>').text('redeem_time'));
-    head.append($('<th></th>').text('expire_time'));
-    head.append($('<th></th>').text('Shared To'));
-    head.append($('<th></th>').text('Used'));
-    head.append($('<th></th>').text('Expires'));
-    head.append($('<th></th>').text('On/Off'));
-    table.append($('<thead></thead>').append(head));
-    var tbody = $('<tbody></tbody>');
+    // first time thru flag
+    var have_expired_shares = false;
+
     for (var i=0,len=data.shares.length; i<len; i++){
+	// add a row to the table body for each share
 	var share = data.shares[i];
 
 	var redeem_name = share.redeem_name ? share.redeem_name : '<Unopened>';
 	var expires = share.expire_time ? format_time(share.expire_time) : 'Never';
 	var expire_time = new Date(share.expire_time);
-	var now = Date.now();
 
 	var expired;
-	if (share.expire_time && (expire_time.getTime() < now)) {
+	if (share.expire_time && (expire_time.getTime() < Date.now())) {
 	    expired = true;
+	    have_expired_shares = true;
 	} else {
 	    expired = false;
 	}
@@ -1200,12 +1195,11 @@ function manage_shares_callback (data, textStatus, jqXHR) {
 	} else {
 	    redeemed = "Not yet";
 	}
-	
-	var row = $('<tr></tr>');
+
+	var row = $('<tr></tr>').addClass('share_row');
 	var status_div = $('<div style="font-size:24px"></div>');
 	if (expired) {
-	    row.css('color', 'red');
-	    row.css('text-decoration', 'line-through');
+	    row.addClass ('share_expired');
 	    status_div.text('Expired');
 	} else {
 	    var switch_on_div = $('<label></label>')
@@ -1227,40 +1221,36 @@ function manage_shares_callback (data, textStatus, jqXHR) {
 		.append(switch_off_div)
 		.append($('<input></input>').attr('type','hidden').attr('name','checkbox'));
 	}
-	row.append($('<td></td>').text(share.redeem_time));
-	row.append($('<td></td>').text(share.expire_time));
-	row.append($('<td></td>').text(share_to));
-	row.append($('<td></td>').text(redeemed));
-	row.append($('<td></td>').text(expires));
+	row.append($('<td></td>').html($('<div></div>').text(share_to).addClass('share_text'))
+		   .append($('<div></div>').css('margin-top','3px').text('Used: '+redeemed).addClass('share_text'))
+		   .append($('<div></div>').css('margin-top','3px').text('Expires: '+expires).addClass('share_text')));
 	row.append($('<td></td>').html(status_div));
-	tbody.append(row);
+	$('#manage_info').append(row);
     }
-    table.append(tbody);
 
     if (is_orientation ('portrait')) {
 	// this message will be cleared when the device is oriented in landscape
 	// This is handled in an orientationchange event listener set in init_geo.after_ready
 	var orientation_msg = "Viewed best in landscape mode";
 	$('#manage_msg').text(orientation_msg);
+    } else {
+	$('#manage_msg').hide();
     }
 
-    $('#manage_info').html(table);
-    if (!  $.fn.dataTable.isDataTable( '#manage_table' ) ) {
-	DT = $('#manage_table').DataTable( {
-		retrieve:     true,
-		searching:    false,
-		lengthChange: false,
-		scrollX:      true,
-		aoColumnDefs: [ { "iDataSort": 0, "aTargets": [ 3 ] },
-	                        { "iDataSort": 1, "aTargets": [ 4 ] },
-				],
-		order:        [ 4, 'desc' ]
-	    } );
-	DT.column(0).visible(false);
-	DT.column(1).visible(false);
+    if (1 || !  $.fn.dataTable.isDataTable( '#manage_table' ) ) {
+	DT = $('#manage_table').dataTable( {
+	    retrieve:     true,
+	    searching:    false,
+	    lengthChange: false,
+	    paging:       false,
+	    scrollX:      true,
+	} );
     }
     $('#manage_form_spinner').hide();
-    $('#share_management_popup').popup("open");
+    if (have_expired_shares) {
+	$('#show_hide_expire').show();
+    }
+    $('#share_management_popup').popup('reposition', {positionTo: 'origin'});
 }
 
 function manage_shares () {
@@ -1271,6 +1261,10 @@ function manage_shares () {
 	var request_parms = { method: 'get_shares',
 			      device_id: device_id,
 	};
+	$('#show_hide_expire_checkbox').prop('checked', false);
+	$('.share_row').remove();
+	$('#share_management_popup').popup("open");
+	$('#manage_form_spinner').show();
 	ajax_request (request_parms, manage_shares_callback, geo_ajax_fail_callback);
     } else {
 	$('#registration_popup').popup('open');
@@ -1639,7 +1633,10 @@ var init_geo = {
 	window.addEventListener('orientationchange',
 				function () {
 				    if (is_orientation ('landscape')) {
+					console.log ('landscape');
 					$('#manage_msg').text('');
+				    } else {
+					console.log ('portrait');
 				    }
 				});
 
