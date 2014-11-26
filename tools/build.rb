@@ -1,6 +1,5 @@
 #!/usr/bin/ruby
 
-require '/home/geopeers/sinatra/geopeers/geo.rb'
 # require 'github_api'
 require 'git'
 require 'fileutils'
@@ -138,6 +137,7 @@ end
 def build
   puts "Pull webapp repo"
   pull_webapp()
+  require "#{Webapp_dir}/geopeers/geo.rb"
   puts "Write Phonegap index.html"
   write_phonegap_index_html()
   puts "Create integrated/minified JS"
