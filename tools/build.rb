@@ -101,7 +101,7 @@ def copy_local_assets
     FileUtils.rm_r phonegap_subdir if File.exists? phonegap_subdir
     FileUtils.mkdir phonegap_subdir
 
-    webapp_subdir = "#{Phonegap_dir}/webapp/geopeers/public/#{asset_type}"
+    webapp_subdir = "#{Webapp_dir}/geopeers/public/#{asset_type}"
 
     Dir.foreach (webapp_subdir) { |filename|
       webapp_filename = "#{webapp_subdir}/#{filename}"
