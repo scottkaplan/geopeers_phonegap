@@ -119,9 +119,9 @@ def copy_local_assets
   FileUtils.cp(css_file, "#{Phonegap_dir}/css")
 
   # upload to production
-  cmd = "cd #{Phonegap_dir}; /usr/bin/scp -i /home/geopeers/.ssh/geopeers css/geopeers.css geopeers.com:src/css"
+  cmd = "cd #{Phonegap_dir}; /usr/bin/scp -i /home/geopeers/.ssh/geopeers css/geopeers.css geopeers.com:src/public/css"
   run_cmd cmd
-  cmd = "cd #{Phonegap_dir}; /usr/bin/scp -i /home/geopeers/.ssh/geopeers js/geopeers.min.js geopeers.com:src/js"
+  cmd = "cd #{Phonegap_dir}; /usr/bin/scp -i /home/geopeers/.ssh/geopeers js/geopeers.min.js geopeers.com:src/public/js"
   run_cmd cmd
 end
 
