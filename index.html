@@ -37,7 +37,7 @@
 	   height="245">
     </div>
     <div id="geopeers_config"
-	 build_id="125"
+	 build_id="126"
 	 version="0.7" >
     </div>
     
@@ -54,7 +54,7 @@
               <img src="images/share_box.png"
 		   width="70"
 		   height="43"
-                   onclick="main_page_share_location_popup()">
+                   onclick="main_page_share_location_page()">
             </div>
             <div class="menu_div">
 	      <div id="main_menu" class="dropdown_menu">
@@ -66,7 +66,7 @@
 			 alt="Icon">
 		    <ul id="navContainer">
 		      <li>
-			<a onclick="main_page_share_location_popup()">
+			<a onclick="main_page_share_location_page()">
 			  Share Location
 			</a>
 		      </li>
@@ -122,24 +122,67 @@
         </div>
       </div>
 
-      <div id="registration_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Setup your Account
-      <div class="popup_close_x"
-	   onclick="$('#registration_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+      <div data-role="content" id="content">
+	<!-- map -->
+        <div id="map_canvas"
+             style="height:100%">       <!-- this has to be here or JQM will override -->
+        </div>
       </div>
     </div>
-    <div class="popup_content">
-      <form id="registration_form">
+
+    <!-- marker popup menu -->
+    <div id="marker_menu" class="dropdown_menu">
+      <ul class="no-js">
+	<li>
+	  <ul id="navContainer">
+	    <div id="share_location_menu_item">
+	      <li>
+		<a onclick="marker_mgr.popup_share_location()">
+		  Share your location with 
+		  <span class="menu_account_name"></span>
+		</a>
+	      </li>
+	    </div>
+	    <hr>
+	    <li>
+	      <a onclick="marker_mgr.show_directions()">
+		Show Directions to
+		<span class="menu_account_name"></span>
+	      </a>
+	    </li>
+	    <div id="share_location_expire_time_div">
+	      <li>
+		<hr>
+		<hr>
+		<div id="share_location_expire_time"
+		     style="color:black; text-align:center; padding:3px">
+		</div>
+	      </li>
+	    </div>
+	  </ul>
+	</li>
+      </ul>
+    </div>  <!-- page -->
+
+    <div data-role="page" id="registration_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Setup your Account
+      </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
+    </div>
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="registration_form">
   <div id="registration_form_info" class="info"></div>
   <div id="registration_form_spinner"
        style="display:none; text-align:center">
@@ -194,28 +237,30 @@
   </div>
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="download_link_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Send Download Link
-      <div class="popup_close_x"
-	   onclick="$('#download_link_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="download_link_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Send Download Link
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <form id="download_link_form">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="download_link_form">
   <div id="download_link_form_info" class="info"></div>
   <div id="download_link_form_spinner"
        style="display:none; text-align:center">
@@ -262,28 +307,30 @@
   </div>
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="download_app_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Download Native App
-      <div class="popup_close_x"
-	   onclick="$('#download_app_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="download_app_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Download Native App
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <form id="download_app_form">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="download_app_form">
   <div id="download_app_form_info" class="info"></div>
   <div id="download_app_form_spinner"
        style="display:none; text-align:center">
@@ -308,28 +355,30 @@
   </div>
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="native_app_switch_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Switch to Native App
-      <div class="popup_close_x"
-	   onclick="$('#native_app_switch_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="native_app_switch_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Switch to Native App
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <form id="native_app_switch_form">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="native_app_switch_form">
   <div class="box_outer">
     <div class="box_frame">
       <div class="box_content">
@@ -346,28 +395,30 @@
   </div>
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="update_app_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Update Native App
-      <div class="popup_close_x"
-	   onclick="$('#update_app_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="update_app_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Update Native App
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <form id="update_app_form">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="update_app_form">
   <div id="update_app_form_info" class="info"></div>
   <div id="update_app_form_spinner"
        style="display:none; text-align:center">
@@ -392,28 +443,30 @@
   </div>
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="share_location_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Share your Location
-      <div class="popup_close_x"
-	   onclick="$('#share_location_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="share_location_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Share your Location
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <form id="share_location_form">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="share_location_form">
   <div id="share_location_form_info" class="info"></div>
   <div id="share_location_form_spinner" style="text-align:center; display:none">
     <img src="images/ajax-loader.gif"
@@ -580,28 +633,30 @@
   <input type="hidden" name="method" value="share_location">
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="support_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Make Us Better
-      <div class="popup_close_x"
-	   onclick="$('#support_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="support_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Make Us Better
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <form id="support_form">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<form id="support_form">
   <div id="support_form_info" class="info"></div>
   <div id="support_form_spinner" style="text-align:center; display:none">
     <img src="images/ajax-loader.gif"
@@ -694,28 +749,30 @@
 	  onclick="send_support()">Send</button>
 </form>
 
+      </div>
     </div>
   </div>
 </div>
 
-      <div id="share_management_popup"
-     data-role="popup"
-     data-transition="fade"
-     style="display:none"
-     >
-  <div class="popup_frame">
-    <div class="popup_header">
-      Manage Shared Locations
-      <div class="popup_close_x"
-	   onclick="$('#share_management_popup').popup('close')">
-	<img src="https://prod.geopeers.com/images/x.png"
-	     width="16"
-	     height="16"
-	     >
+    <div data-role="page" id="share_management_page">
+  <div class="page_frame">
+    <div data-role="header">
+      <div class="page_header">
+	Manage Shared Locations
       </div>
+      <a data-role="button"
+	 data-direction="reverse"
+	 data-rel="back"
+	 data-icon="arrow-l"
+	 data-iconpos="left"
+	 href="#index"
+	 >
+	Back
+      </a>
     </div>
-    <div class="popup_content">
-      <div id="manage_form_spinner" style="text-align:center; display:none">
+    <div role="main" class="ui-content">
+      <div class="page_content">
+	<div id="manage_form_spinner" style="text-align:center; display:none">
   <img src="images/ajax-loader.gif"
        width="220"
        height="19"
@@ -744,56 +801,20 @@
     </tr>
   </thead>
 
-  <tbody id="manage_info">
-  </tbody>
+  <div id="data_table" style="display:none">
+    <tbody id="manage_info">
+    </tbody>
+  </div>
+  <div id="empty_msg">
+  </div>
 </table>
 
+      </div>
     </div>
   </div>
 </div>
 
 
-      <div data-role="content" id="content">
-	<!-- map -->
-        <div id="map_canvas"
-             style="height:100%">       <!-- this has to be here or JQM will override -->
-        </div>
-      </div>
-    </div>
-
-    <!-- marker popup menu -->
-    <div id="marker_menu" class="dropdown_menu">
-      <ul class="no-js">
-	<li>
-	  <ul id="navContainer">
-	    <div id="share_location_menu_item">
-	      <li>
-		<a onclick="marker_mgr.popup_share_location()">
-		  Share your location with 
-		  <span class="menu_account_name"></span>
-		</a>
-	      </li>
-	    </div>
-	    <hr>
-	    <li>
-	      <a onclick="marker_mgr.show_directions()">
-		Show Directions to
-		<span class="menu_account_name"></span>
-	      </a>
-	    </li>
-	    <div id="share_location_expire_time_div">
-	      <li>
-		<hr>
-		<hr>
-		<div id="share_location_expire_time"
-		     style="color:black; text-align:center; padding:3px">
-		</div>
-	      </li>
-	    </div>
-	  </ul>
-	</li>
-      </ul>
-    </div>
     <script>
       
       start();

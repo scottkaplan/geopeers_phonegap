@@ -3,6 +3,20 @@
 //
 // Utils
 //
+
+function get_client_type () {
+    var user_agent = navigator.userAgent;
+    console.log (user_agent);
+    if (/android/i.exec(user_agent)) {
+	return ('android');
+    } else if (/iphone/i.exec(user_agent) ||
+	       /ipad/i.exec(user_agent)) {
+	return ('ios');
+    } else {
+	return ('web');
+    }
+}
+
 function get_parms (url) {
     var parm_str = url.match (/^geopeers:\/\/api\?(.*)/);
     if (! parm_str) {
@@ -73,13 +87,6 @@ function if_else_native (is_native_function, is_not_native_function) {
     }
 }
 
-function update_map_canvas_pos () {
-    var content_height = $('#geo_info').height() + 65;
-    $('#content').css('top', content_height+'px');
-    console.log ("content_height="+content_height);
-    return;
-}
-
 function display_alert_message (alert_method, message) {
     // this is called either
     // 1) 'alert_method=<alert_method>' as a URL parm
@@ -92,6 +99,10 @@ function display_alert_message (alert_method, message) {
     var message_type = getParameterByName('message_type') ? getParameterByName('message_type') : 'message_error';
     var message;
     switch (alert_method) {
+    case "NO_NATIVE":
+	message = "There is no native app available for this device";
+	message_type = 'message_warning';
+	break;
     case "SUPPORT_CONTACTED":
 	message = "There was a problem with your request.  Support has been contacted.";
 	message_type = 'message_error';
@@ -150,7 +161,7 @@ function display_message (message, css_class) {
     } else {
 	// create new divs - message and close button
 	// append to geo_info
-	var onclick_cmd = "$('#"+msg_id+"').hide(); resize_map()";
+	var onclick_cmd = "$('#"+msg_id+"').hide(); map_mgr.resize()";
 	var x_div = $('<div></div>')
 	    .attr('onclick', onclick_cmd)
 	    .css('position','relative')
@@ -166,7 +177,7 @@ function display_message (message, css_class) {
 	wrapper_div.append(msg_div);
 	$('#geo_info').append(wrapper_div);
     }
-    resize_map();
+    map_mgr.resize();
     return (msg_id);
 }
 
@@ -284,10 +295,32 @@ function run_position_function (post_func) {
     return;
 }
 
+var page_mgr = {
+    init: function () {
+	$( document ).on( "pagecontainerchange", function( event, ui ) {
+	    if (ui.toPage.attr('id') === 'index') {
+		// clean up the map when we return to the index page
+		resize_map();
+	    }
+	} );
+    },    
+    switch_page: function (page_id) {
+	$(":mobile-pagecontainer").pagecontainer("change", '#'+page_id, {transition: 'slide'});
+	return;
+    },
+    get_active_page: function () {
+	return ($(":mobile-pagecontainer").pagecontainer("getActivePage").attr('id'));
+    },
+}
+
 var my_pos = {
     // control the initial pan/zoom
     current_position: null,
     marker: null,
+    user_action: false,
+    set_user_action: function () {
+	my_pos.user_action = true;
+    },
     update_position: function (position_from_server) {
 	if (! device_id_mgr.phonegap || ! position_from_server)
 	    return;
@@ -311,6 +344,10 @@ var my_pos = {
 	return;
     },
     pan_zoom: function () {
+	// Don't update the screen if the user has already interacted with it
+	if (my_pos.user_action)
+	    return;
+	
 	var bounds = new google.maps.LatLngBounds ();
 	if (jQuery.isEmptyObject(marker_mgr.markers)) {
 	    if (my_pos.current_position) {
@@ -318,8 +355,6 @@ var my_pos = {
 		var current_location = new google.maps.LatLng(my_pos.current_position.coords.latitude,
 							      my_pos.current_position.coords.longitude);
 		bounds.extend (current_location);
-	    } else {
-		bounds.extend (display_mgr.us_center);
 	    }
 	} else {
 	    // create a bounding box with the markers
@@ -338,13 +373,18 @@ var my_pos = {
 	}
 
 	var map = $('#map_canvas').gmap('get','map');
-	map.fitBounds (bounds);
+	if (bounds.isEmpty()) {
+	    bounds.extend (display_mgr.us_center);
+	    map.fitBounds (bounds);
+	    map.setZoom(4);
+	} else {
+	    map.fitBounds (bounds);
+	    // if we only have one marker, fitBounds zooms to maximum.
+	    // Back off to max_zoom
+	    var zoom = Math.min(map.getZoom(), 18)
+	    map.setZoom(zoom);
+	}
 
-	// if we only have one marker, fitBounds zooms to maximum.
-	// Back off to max_zoom
-	var zoom = Math.min(map.getZoom(), 18)
-	console.log (zoom);
-	map.setZoom(zoom);
     },
     reposition: function (position) {
 	run_position_function (function(position) {
@@ -524,7 +564,11 @@ var marker_mgr = {
     },
     create_label_text: function (sighting) {
 	var elapsed_str = marker_mgr.create_elapsed_str (sighting);
-	var label_text = '<span style="text-align:center;font-size:20px;font-weight:bold;color:#453345"><div>' + sighting.name + '</div><div style="font-size:16px">' + elapsed_str + '</div></span>';
+	var elapsed_div = '<div class="elapsed_str marker_label">' + elapsed_str + '</div>';
+	var name_div = '<div>' + sighting.name + '</div>';
+	var div_id = "marker_label_"+sighting.device_id;
+	var label_text = '<span id="'+ div_id + '" class="marker_label_text">' +
+	    name_div + elapsed_div + '</span>';
 	return (label_text);
     },
     update_marker_view: function (marker_info) {
@@ -533,7 +577,7 @@ var marker_mgr = {
 						       sighting.gps_longitude);
 	var label_text = marker_mgr.create_label_text (sighting);
 	$('#map_canvas').gmap('find', 'markers',
-{ 'property': 'device_id', 'value': sighting.device_id },
+			      { 'property': 'device_id', 'value': sighting.device_id },
 			      function(marker, found) {
 				  if (found) {
 				      marker.labelContent = label_text;
@@ -547,6 +591,8 @@ var marker_mgr = {
 
 	// This is probably not the right way to dereference the event
 	var event = e.nb;
+	if (! event)
+	    return;
 
 	// reposition the menu so it is next to the marker that was clicked
 	$("#marker_menu").css( {position:"absolute", top:event.pageY, left: event.pageX});
@@ -580,7 +626,7 @@ var marker_mgr = {
 	$('#share_account_name').text(marker_mgr.selected_sighting.name);
 	$("input[type='hidden'][name='seer_device_id']").val(marker_mgr.selected_sighting.device_id);
 	$('#share_location_form_info').html('');
-	$('#share_location_popup').popup('open');
+	page_mgr.switch_page ('share_location_page');
 	return;
     },
     create_marker: function (sighting) {
@@ -599,7 +645,7 @@ var marker_mgr = {
 	    return;
 
 	// In addition to the markers, the server sends us our position
-	// For native (phonegap) apps, the background GPS, kills our GPS
+	// For native (phonegap) apps, the background GPS kills the webview GPS
 	// so the server has to send us our position.  Go figure.
 	my_pos.update_position (data.current_position);
 
@@ -613,16 +659,78 @@ var marker_mgr = {
 	    if (! marker_mgr.markers[sighting.device_id]) {
 		marker_mgr.markers[sighting.device_id] = marker_mgr.create_marker (sighting);
 	    }
-	    // and hold the most recent sighting to keep this marker's label up to date
+	    // hold the most recent sighting to keep this marker's label up to date
 	    marker_mgr.markers[sighting.device_id].sighting = sighting;
+
 	}
 
 	// update the views of all the markers
-	// so we update the elapsed time of markers where the position has not changed
+	// so we update the elapsed time of markers,
+	// even where the position has not changed
 	for (var device_id in marker_mgr.markers) {
 	    marker_mgr.update_marker_view (marker_mgr.markers[device_id]);
 	}
-	return;
+
+	marker_mgr.overlap_detection();
+    },
+    overlaps: function (box_1, box_2) {
+	if (! box_1 || ! box_1)
+	    return (false);
+	console.log (box_1);
+	console.log (box_2);
+	var x_overlap =
+	    (box_1.x <= box_2.x && box_2.x <= box_1.x+box_1.width) ||
+	    (box_2.x <= box_1.x && box_1.x <= box_2.x+box_2.width);
+	var y_overlap =
+	    (box_1.y <= box_2.y && box_2.y <= box_1.y+box_1.height) ||
+	    (box_2.y <= box_1.y && box_1.y <= box_2.y+box_2.height);
+	return (x_overlap && y_overlap);
+    },
+    overlap_detection: function () {
+	// if the labels overlap, hide the elapsed time
+	var device_ids = [];
+	for (var device_id in marker_mgr.markers) {
+	    device_ids.push (device_id);
+	    // get the parent of our label div
+	    var marker_label_id = 'marker_label_'+device_id;
+	    var marker_label = $('#'+marker_label_id).parent();
+	    if (marker_label.height()) {
+		marker_mgr.markers[device_id].bound_box =
+		    { 'x'       : marker_label.css('left').replace(/px$/,"") - 0,
+		      'y'       : marker_label.css('top').replace(/px$/,"") - 0,
+		      'height'  : marker_label.height(),
+		      'width'   : marker_label.width(),
+		      'overlap' : false,
+		    };
+	    }
+	}
+
+	// compute the pairwise permutations of device ids and check for overlap
+	for (var i=0; i<device_ids.length-1; i++) {
+	    for (var j=i+1; j<device_ids.length; j++) {
+		var box_1 = marker_mgr.markers[device_ids[i]].bound_box;
+		var box_2 = marker_mgr.markers[device_ids[j]].bound_box;
+		if (marker_mgr.overlaps (box_1, box_2)) {
+		    box_1.overlap = true;
+		    box_2.overlap = true;
+		}
+	    }
+	}
+
+	// we marked any boxes that overlap
+	// comb through all the boxes and set their new visibility
+	for (var device_id in marker_mgr.markers) {
+	    var marker = marker_mgr.markers[device_id];
+	    if (marker.bound_box) {
+		var marker_label_id = 'marker_label_'+device_id;
+		var elapsed_div = $('#'+marker_label_id).find('.elapsed_str');
+		if (marker.bound_box.overlap) {
+		    elapsed_div.css('visibility', 'hidden');
+		} else {
+		    elapsed_div.css('visibility', 'visible');
+		}
+	    }
+	}
     },
     show_directions: function () {
 	var url = "https://maps.google.com/maps";
@@ -733,7 +841,7 @@ var device_id_bind = {
     native_app_redirect: function (message) {
 	// make sure this can't fire again
 	$('#'+device_id_bind.countdown_native_app_redirect_div_id).remove();
-	update_map_canvas_pos ();
+	map_mgr.update_canvas_pos ();
 
         var native_app_deeplink = "geopeers://";
 	if (message) {
@@ -762,6 +870,14 @@ var device_id_bind = {
     },
 }
 
+function device_id_bind_webapp (alert_method, message) {
+    // this is only sent to the webapp, so we only need to check for .ready
+    $(document).ready(function() {
+	init_geo.after_ready();
+	display_alert_message(alert_method, message);
+    });
+}
+
 // this is a magic function name for catching a deeplink call
 function handleOpenURL(url) {
     // alert ("in handleOpenURL");
@@ -775,36 +891,47 @@ function handleOpenURL(url) {
 // MAP STUFF
 //
 
-function create_map (position) {
-    // flip the loading image
-    $('#gps_spinner').hide();
-    $('#index').show();
+var map_mgr = {
+    update_canvas_pos: function() {
+	var content_height = $('#geo_info').height() + 65;
+	$('#content').css('top', content_height+'px');
+	console.log ("content_height="+content_height);
+	return;
+    },
+    create: function(position) {
+	// flip the loading image
+	$('#gps_spinner').hide();
+	$('#index').show();
 
-    if (position) {
-	var initial_position = new google.maps.LatLng(position.coords.latitude,
-						      position.coords.longitude);
-	$('#map_canvas').gmap({center: initial_position});
-	console.log (initial_position);
-    } else {
-	// We don't know our current position
-	// show the whole US
-	$('#map_canvas').gmap({center: display_mgr.us_center, zoom:8});
-    }
+	if (position) {
+	    var initial_position = new google.maps.LatLng(position.coords.latitude,
+							  position.coords.longitude);
+	    $('#map_canvas').gmap({center: initial_position});
+	    console.log (initial_position);
+	} else {
+	    // We don't know our current position
+	    // show the whole US
+	    $('#map_canvas').gmap({center: display_mgr.us_center, zoom:8});
+	}
 
-    // reset the header height everytime the map's bounds change
-    var map = $('#map_canvas').gmap('get','map');
-    google.maps.event.addListener(map, 'bounds_changed', update_map_canvas_pos);
-}
-
-function resize_map () {
-    console.log ("resizing");
-    // Do this twice
-    // Once before resizing the map
-    update_map_canvas_pos();
-    
-    var map = $('#map_canvas').gmap('get','map');
-    // And again in the bounds_changed callback if the bounds have changed
-    google.maps.event.trigger(map, 'resize');
+	// reset the header height everytime the map's bounds change
+	var map = $('#map_canvas').gmap('get','map');
+	google.maps.event.addListener(map, 'bounds_changed', map_mgr.update_canvas_pos);
+	google.maps.event.addListener(map, 'bounds_changed', marker_mgr.overlap_detection);
+	google.maps.event.addListener(map, 'dragend', my_pos.set_user_action);
+    },
+    resize: function() {
+	if (page_mgr.get_active_page() === 'index') {
+	    // Do this twice
+	    // Once before resizing the map
+	    map_mgr.update_canvas_pos();
+	    
+	    var map = $('#map_canvas').gmap('get','map');
+	    console.log(map.getZoom());
+	    // And again in the bounds_changed callback if the bounds have changed
+	    google.maps.event.trigger(map, 'resize');
+	}
+    },
 }
 
 //
@@ -853,7 +980,7 @@ function send_position_request (position) {
 // SHARE_LOCATION
 //
 
-function clear_share_location_popup () {
+function clear_share_location_page () {
     $('#share_via').show();
     $('#manual_share_via').show();
     $('#manual_share_to').show();
@@ -866,11 +993,11 @@ function clear_share_location_popup () {
     $('#share_location_form_info').html('');
 }
 
-function main_page_share_location_popup () {
+function main_page_share_location_page () {
     if (device_id_mgr.phonegap) {
-        // configure popup in case it was used previously
-	clear_share_location_popup()
-	$('#share_location_popup').popup('open');
+        // configure page in case it was used previously
+	clear_share_location_page()
+	page_mgr.switch_page ('share_location_page');
     } else {
 	// set to false to allow sharing from webapp (testing)
 	if (true) {
@@ -879,7 +1006,7 @@ function main_page_share_location_popup () {
 	    $('#share_via').show();
 	    $('#manual_share_via').show();
 	    $('#manual_share_to').show();
-	    $('#share_location_popup').popup('open');
+	    page_mgr.switch_page ('share_location_page');
 	}
     }
     return;
@@ -888,17 +1015,20 @@ function main_page_share_location_popup () {
 function share_location_callback (data, textStatus, jqXHR) {
     $('#share_location_form_spinner').hide();
     if (data.message) {
-	// message box on main page / close popup
+	// message box on main page
 	var css_class = data.css_class ? data.css_class : 'message_success'
-	    display_message(data.message, css_class);
-	$('#share_location_popup').popup('close');
+	display_message(data.message, css_class);
+
+	page_mgr.switch_page ('index');
+
 	// clear error message
 	$('#share_location_form_info').val('');
+
 	// clear form text
-	$('#share_location_popup').find("input[type=text], textarea").val("");
-    } else if (data.popup_message) {
-	// error message on popup which stays open
-	$('#share_location_form_info').html(data.popup_message);
+	$('#share_location_page').find("input[type=text], textarea").val("");
+    } else if (data.page_message) {
+	// error message on page which stays open
+	$('#share_location_form_info').html(data.page_message);
     }
 
     // in case the name was updated, update registration.reg_info
@@ -913,7 +1043,7 @@ function share_location () {
 
     // If the user supplied an account name:
     if ($("#account_name").val()) {
-	// and make sure it shows up in the Account Settings popup
+	// and make sure it shows up in the Account Settings page
 	if (registration.reg_info &&
 	    registration.reg_info.account) {
 	    registration.reg_info.account.name = $("#account_name").val();
@@ -963,10 +1093,14 @@ function share_location () {
 
 function send_support_callback  (data, textStatus, jqXHR) {
     $('#support_form_spinner').hide();
+    $('#support_form_problem').empty();
+    $('#support_form_reproduction').empty();
+    $('#support_form_feature').empty();
+    $('#support_form_cool_use').empty();
     var css_class = data.css_class ? data.css_class : 'message_success'
     display_message(data.message, css_class);
-    $('#support_popup').popup('close');
-    $('#support_popup').find("input[type=text], textarea").val("");
+    page_mgr.switch_page ('index');
+    $('#support_page').find("input[type=text], textarea").val("");
     return;
 }
 
@@ -994,7 +1128,7 @@ function display_support () {
     $('#support_version').text(build_id);
     $("input[type='hidden'][name='support_version']").val(build_id);
     $('#support_form_info').html('');
-    $('#support_popup').popup('open');
+    page_mgr.switch_page ('support_page');
     return;
 }
 
@@ -1012,8 +1146,7 @@ function config_callback (data, textStatus, jqXHR) {
     }
 
     if (data.update) {
-	$('#update_app_popup').show();
-	$('#update_app_popup').popup('open');
+	page_mgr.switch_page ('update_app_page');
     }
 
     // The server is telling us if there is an account name for this device
@@ -1028,16 +1161,16 @@ function config_callback (data, textStatus, jqXHR) {
 	db.get_global ('device_id_bind_complete', device_id_bind.check);
 	// if we didn't get redirected, we'll still be here after 1000 msec
 	setTimeout(function() {
-		background_gps.init ();
+	    background_gps.init ();
 
-		// sets registration.status
-		registration.init();
-		heartbeat();
-	    }, 1000);
+	    // sets registration.status
+	    registration.init();
+	    start_heartbeat();
+	}, 1000);
     } else {
 	// sets registration.status
 	registration.init();
-	heartbeat();
+	start_heartbeat();
     }
     return;
 }
@@ -1077,8 +1210,6 @@ function get_positions () {
 //
 // GET_SHARES
 //
-
-var DT;
 
 function format_time (time) {
     // JS version of same routine in geo.rb on server
@@ -1124,7 +1255,24 @@ function manage_shares_callback (data, textStatus, jqXHR) {
     // first time thru flag
     var have_expired_shares = false;
 
+    // clear the old contents and reset the display
     $('.share_row').remove();
+    $('#manage_msg').hide();
+    $('#empty_msg').empty();
+    $('#data_table').empty();
+    $('#manage_form_spinner').hide();
+
+    if (! data || ! data.shares || data.shares.length == 0) {
+	var client_type = get_client_type();
+	if (is_phonegap()) {
+	    $('#empty_msg').html("You haven't shared your location yet");
+	} else {
+	    $('#empty_msg').html("You need the native app to share your location");
+	}
+	$('#empty_msg').show();
+	return;
+    }
+
     for (var i=0,len=data.shares.length; i<len; i++){
 	// add a row to the table body for each share
 	var share = data.shares[i];
@@ -1194,33 +1342,31 @@ function manage_shares_callback (data, textStatus, jqXHR) {
 	// This is handled in an orientationchange event listener set in init_geo.after_ready
 	var orientation_msg = "Viewed best in landscape mode";
 	$('#manage_msg').text(orientation_msg);
-    } else {
-	$('#manage_msg').hide();
+	$('#manage_msg').show();
     }
 
-    if (1 || !  $.fn.dataTable.isDataTable( '#manage_table' ) ) {
-	DT = $('#manage_table').dataTable( {
-	    retrieve:     true,
-	    searching:    false,
-	    lengthChange: false,
-	    paging:       false,
-	    scrollX:      true,
-	    order:        [ [ 3, 'desc' ], [ 2, 'desc' ] ],
-	} );
-    }
-    $('#manage_form_spinner').hide();
+    var dt = $('#manage_table').dataTable( {
+	retrieve:     true,
+	searching:    false,
+	lengthChange: false,
+	paging:       false,
+	scrollX:      true,
+	order:        [ [ 3, 'desc' ], [ 2, 'desc' ] ],
+    } );
+
+    // only show the checkbox UI control if there are expired shares
     if (have_expired_shares) {
 	$('#show_hide_expire').show();
+    } else {
+	$('#show_hide_expire').hide();
     }
 
-    
     if ($('#show_hide_expire_checkbox').prop('checked')) {
 	$('.share_expired').hide();
     } else {
 	$('.share_expired').show();
     }
-
-    $('#share_management_popup').popup('reposition', {positionTo: 'origin'});
+    $('#data_table').show();
 }
 
 function manage_shares () {
@@ -1230,9 +1376,8 @@ function manage_shares () {
     var request_parms = { method: 'get_shares',
 			  device_id: device_id,
 			};
-    // $('#show_hide_expire_checkbox').prop('checked', false).checkboxradio('refresh');
-    $('#share_management_popup').popup("open");
     $('#manage_form_spinner').show();
+    page_mgr.switch_page ('share_management_page');
     ajax_request (request_parms, manage_shares_callback, geo_ajax_fail_callback);
     return;
 }
@@ -1250,9 +1395,9 @@ function share_active_toggle(share_id) {
     return;
 }
 
-function display_register_popup () {
-    alert ("display_register_popup");
-}
+//
+// REGISTRATION
+//
 
 function validate_registration_form () {
     var name = $('#registration_form #name').val();
@@ -1275,7 +1420,7 @@ function validate_registration_form () {
     return true;
 }
 
-function update_registration_popup () {
+function update_registration_page () {
     if (registration.reg_info && registration.reg_info.account) {
 	$('#registration_form #name').val(registration.reg_info.account.name);
 	$('#registration_form #email').val(registration.reg_info.account.email);
@@ -1284,18 +1429,10 @@ function update_registration_popup () {
     return;
 }
 
-function display_registration_popup () {
-    update_registration_popup();
-    $('#registration_popup').show();
-    $('#registration_form_info').html('');
-    $('#registration_popup').popup('open');
-    return;
-}
-
 function display_registration () {
-    // This is an ugly hack
-    // so that we popup the registration screen after the menu is closed
-    setTimeout(display_registration_popup, 1 * 1000);
+    update_registration_page();
+    $('#registration_form_info').html('');
+    page_mgr.switch_page ('registration_page');
     return;
 }
 
@@ -1327,7 +1464,7 @@ var registration = {
 	if (data) {
 	    registration.status = 'REGISTERED';
 	    registration.reg_info = data;
-	    update_registration_popup();
+	    update_registration_page();
 
 	    // initializations that require registration
 	    init_geo.update_main_menu();
@@ -1355,38 +1492,6 @@ var registration = {
 	registration.init();
 	return;
     },
-}
-
-function heartbeat () {
-    // things that should happen periodically
-    var period_minutes = 1;
-
-    // refresh the sightings for our shares
-    get_positions();
-
-    // keep the green star in the right spot
-    my_pos.reposition();
-
-    // last ditch to keep the UI clean
-    resize_map();
-
-    // if we get here, schedule the next iteration
-    setTimeout(heartbeat, period_minutes * 60 * 1000);
-    return;
-}
-
-
-function get_client_type () {
-    var user_agent = navigator.userAgent;
-    console.log (user_agent);
-    if (/android/i.exec(user_agent)) {
-	return ('android');
-    } else if (/iphone/i.exec(user_agent) ||
-	       /ipad/i.exec(user_agent)) {
-	return ('ios');
-    } else {
-	return ('web');
-    }
 }
 
 var download = {
@@ -1420,15 +1525,15 @@ var download = {
 	    //   3) native app not installed, not available
 	    if (have_native_app()) {
 		// Offer to switch to native app
-		$('#native_app_switch_popup').popup('open');
+		page_mgr.switch_page ('native_app_switch_page');
 	    } else {
 		if (download.download_url()) {
 		    // don't start the download without warning them in a popup
-		    $('#download_app_popup').popup('open');
+		    page_mgr.switch_page ('download_app_page');
 		} else {
 		    // we don't have a native app for this device, offer to send a link
 		    $('#native_app_not_available').show();
-		    $('#download_link_popup').popup('open');
+		    page_mgr.switch_page ('download_link_page');
 		}
 	    }
 	}
@@ -1439,9 +1544,16 @@ var download = {
     },
     send_link_callback: function (data, textStatus, jqXHR) {
 	$('#download_link_form_spinner').hide();
-	$('#download_link_popup').popup('close');
-	var css_class = data.css_class ? data.css_class : 'message_success'
-	display_message(data.message, css_class);
+	if (data.page_message) {
+	    // show message on this page
+	    $('#download_link_form_info').html(data.page_message);
+	} else {
+	    // show message on index page
+	    page_mgr.switch_page ('index');
+	    var css_class = data.css_class ? data.css_class : 'message_success'
+	    display_message(data.message, css_class);
+	    $('#download_link_form_info').empty();
+	}
     },
 };
 
@@ -1451,7 +1563,7 @@ function download_app_wrapper () {
 
 function download_link_wrapper () {
     $('#native_app_not_available').hide();
-    $('#download_link_popup').popup('open');
+    page_mgr.switch_page ('download_link_page');
 }
 
 function download_redirect_wrapper () {
@@ -1484,69 +1596,69 @@ function populate_dropdown (id, optionList) {
 function select_contact_callback (contact) {
     console.log (contact);
     setTimeout(function() {
-	    // for mobile/email
-	    // there are two fields
-	    //   my_contacts_[mobile|email] - a single display box
-	    //   my_contacts_[mobile|email]_dropdown - multi-select dropdown
-	    var mobile;
-	    $('#my_contacts_mobile').html('');
-	    $('#my_contacts_mobile_dropdown').empty();
-	    if (contact && contact.phoneNumbers ) {
-		if (contact.phoneNumbers.length == 1) {
-		    mobile = contact.phoneNumbers[0].value;
-		    $('#my_contacts_mobile').html(mobile);
-		    $('input:input[name=my_contacts_mobile]').val(mobile);
-		} else {
-		    populate_dropdown ('my_contacts_mobile_dropdown', contact.phoneNumbers);
-		    $('#my_contacts_mobile_dropdown_div').show();
-		}
+	// for mobile/email
+	// there are two fields
+	//   my_contacts_[mobile|email] - a single display box
+	//   my_contacts_[mobile|email]_dropdown - multi-select dropdown
+	var mobile;
+	$('#my_contacts_mobile').html('');
+	$('#my_contacts_mobile_dropdown').empty();
+	if (contact && contact.phoneNumbers ) {
+	    if (contact.phoneNumbers.length == 1) {
+		mobile = contact.phoneNumbers[0].value;
+		$('#my_contacts_mobile').html(mobile);
+		$('input:input[name=my_contacts_mobile]').val(mobile);
 	    } else {
-		$('#my_contacts_mobile').html("<i>None</i>");
-		$('#my_contacts_mobile_dropdown_div').hide();
+		populate_dropdown ('my_contacts_mobile_dropdown', contact.phoneNumbers);
+		$('#my_contacts_mobile_dropdown_div').show();
 	    }
+	} else {
+	    $('#my_contacts_mobile').html("<i>None</i>");
+	    $('#my_contacts_mobile_dropdown_div').hide();
+	}
 
-	    var email;
-	    $('#my_contacts_email').html('');
-	    $('#my_contacts_email_dropdown').empty();
-	    if (contact && contact.emails) {
-		if (contact.emails.length == 1) {
-		    email = contact.emails[0].value;
-		    $('#my_contacts_email').html(email);
-		    $('input:input[name=my_contacts_email]').val(email);
-		} else {
-		    populate_dropdown ('my_contacts_email_dropdown', contact.emails);
-		    $('#my_contacts_email_dropdown_div').show();
-		}
+	var email;
+	$('#my_contacts_email').html('');
+	$('#my_contacts_email_dropdown').empty();
+	if (contact && contact.emails) {
+	    if (contact.emails.length == 1) {
+		email = contact.emails[0].value;
+		$('#my_contacts_email').html(email);
+		$('input:input[name=my_contacts_email]').val(email);
 	    } else {
-		$('#my_contacts_email').html("<i>None</i>");
-		$('#my_contacts_email_dropdown_div').hide();
+		populate_dropdown ('my_contacts_email_dropdown', contact.emails);
+		$('#my_contacts_email_dropdown_div').show();
 	    }
+	} else {
+	    $('#my_contacts_email').html("<i>None</i>");
+	    $('#my_contacts_email_dropdown_div').hide();
+	}
 
-	    // manage the UI elements on the popup
-	    $('#or_div').hide();
-	    if (contact && (contact.phoneNumbers || contact.emails)) {
-		// we got something back
-		// activate the dropdowns (if any)
-		$('#my_contacts_display').trigger("change");
-		$('#my_contacts_display').show();
+	// manage the UI elements on the popup
+	$('#or_div').hide();
+	if (contact && (contact.phoneNumbers || contact.emails)) {
+	    // we got something back
+	    // activate the dropdowns (if any)
+	    $('#my_contacts_display').trigger("change");
+	    $('#my_contacts_display').show();
 
-		// turn off the manual inputs
-		$('#manual_share_via').hide();
-		$('#manual_share_to').hide();
-	    } else {
-		// we didn't get anything back from the contact list
-		// configure for manual input
-		$('#my_contacts_display').hide();
-		$('#manual_share_via').show();
-		$('#manual_share_to').show();
-	    }
+	    // turn off the manual inputs
+	    $('#manual_share_via').hide();
+	    $('#manual_share_to').hide();
+	} else {
+	    // we didn't get anything back from the contact list
+	    // configure for manual input
+	    $('#my_contacts_display').hide();
+	    $('#manual_share_via').show();
+	    $('#manual_share_to').show();
+	}
 
-	    // back-to-back My Contacts are broken
-	    // (returns to blank screen)
-	    $('#my_contacts_button').hide();
+	// back-to-back My Contacts are broken
+	// (returns to blank screen)
+	$('#my_contacts_button').hide();
 
-	    // finally ready to display the popup
-	    $('#share_location_popup').popup('open');
+	// finally ready to display the popup
+	page_mgr.switch_page ('share_location_page');
 	}, 500);
 }
 
@@ -1562,7 +1674,7 @@ function select_contact () {
     $('input[name=share_to]').val(null);
     $('input[name=share_via]').prop('checked',false);
 
-    $('#share_location_popup').popup('open');
+    page_mgr.switch_page ('share_location_page');
 
     navigator.contacts.pickContact(function(contact){
 	    select_contact_callback(contact);
@@ -1576,6 +1688,34 @@ function select_contact () {
 // Init and startup
 //
 
+function start_heartbeat () {
+    // start one beat immediately
+    heartbeat();
+
+    // normally, heartbeats are very 60 sec
+    // but queue one heartbeat after 10 sec to try to get past all the initialization foo
+    setTimeout(heartbeat, 10 * 1000);
+    return;
+}
+
+function heartbeat () {
+    // things that should happen periodically
+    var period_minutes = 1;
+
+    // refresh the sightings for our shares
+    get_positions();
+
+    // keep the green star in the right spot
+    my_pos.reposition();
+
+    // last ditch to keep the UI clean
+    map_mgr.resize();
+
+    // if we get here, schedule the next iteration
+    setTimeout(heartbeat, period_minutes * 60 * 1000);
+    return;
+}
+
 var init_geo = {
     after_ready: function () {
 	// This is called after we are ready
@@ -1583,11 +1723,6 @@ var init_geo = {
 	// for phonegap, this is deviceready
 
 	console.log ("in init");
-
-	// The popups have 'display:none' in the markup,
-	// so we aren't depending on any JS loading to hide them.
-	// At this point, it's safe to let the JS control them
-	init_geo.show_popups ();
 
 	// show the spinner in 200mS (.2 sec)
 	// if there are no GPS issues, the map will display quickly and
@@ -1601,7 +1736,7 @@ var init_geo = {
 	// turn on when GEOP-40 is fixed
 	// window.addEventListener('orientationchange', change_orientation);
 
-	run_position_function (function(position) {create_map(position)});
+	run_position_function (function(position) {map_mgr.create(position)});
 
 	device_id_mgr.init ();
 
@@ -1624,23 +1759,16 @@ var init_geo = {
 
 	// keep updating bounding box pan/zoom for first 5 sec
 	// after that, the user has to pan/zoom manually
-	for (var i=1; i<10; i++) {
+	for (var i=1; i<5; i++) {
 	    setTimeout(my_pos.pan_zoom, 1000*i);
 	}
 
 	// keep the UI clean while changes come in (e.g. markers, current pos)
 	for (var i=1; i<10; i++) {
-	    setTimeout(resize_map, 1000*i);
+	    setTimeout(map_mgr.resize, 1000*i);
 	}
-    },
-    show_popups: function () {
-	['registration_popup', 'download_link_popup', 'download_app_popup',
-	 'update_app_popup', 'native_app_switch_popup',
-	 'share_location_popup', 'support_popup', 'share_management_popup']
-	.forEach(function (element, index, array) {
-		$('#'+element).show();
-	    });
-	return;
+
+	page_mgr.init();
     },
     init_switches: function () {
 	$(".cb-enable").click(function(){
@@ -1671,18 +1799,6 @@ var init_geo = {
 	}
     },
 };
-
-function console_log (msg) {
-    console.log (Date.now()+':'+msg);
-}
-
-function device_id_bind_webapp (alert_method, message) {
-    // this is only sent to the webapp, so we only need to check for .ready
-    $(document).ready(function() {
-	init_geo.after_ready();
-	display_alert_message(alert_method, message);
-    });
-}
 
 function start () {
     console.log ('start');
