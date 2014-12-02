@@ -28,8 +28,8 @@
   <body>
     
     <div id="gps_spinner"
-	 style="text-align:center; display:block">
-      <div style="font-size:24px; font-weight:bold; padding-bottom:36px; padding-top:30px">
+	 class="splash_div">
+      <div class="splash_text">
 	Loading...
       </div>
       <img src="images/gps-satellites.gif"
@@ -37,7 +37,7 @@
 	   height="245">
     </div>
     <div id="geopeers_config"
-	 build_id="145"
+	 build_id="146"
 	 version="0.7" >
     </div>
     
@@ -173,7 +173,7 @@
 		<hr>
 		<hr>
 		<div id="share_location_expire_time"
-		     style="color:black; text-align:center; padding:3px">
+		     class="marker_menu_expire_time">
 		</div>
 	      </li>
 	    </div>
@@ -281,7 +281,7 @@
 	<form id="download_link_form">
   <div id="download_link_form_info" class="info"></div>
   <div id="download_link_form_spinner"
-       style="display:none; text-align:center">
+       class="page_spinner">
     <img src="images/ajax-loader.gif"
 	 width="220"
 	 height="19"
@@ -351,7 +351,7 @@
 	<form id="download_app_form">
   <div id="download_app_form_info" class="info"></div>
   <div id="download_app_form_spinner"
-       style="display:none; text-align:center">
+       class="page_spinner">
     <img src="images/ajax-loader.gif"
 	 width="220"
 	 height="19"
@@ -439,7 +439,7 @@
 	<form id="update_app_form">
   <div id="update_app_form_info" class="info"></div>
   <div id="update_app_form_spinner"
-       style="display:none; text-align:center">
+       class="page_spinner">
     <img src="images/ajax-loader.gif"
 	 width="220"
 	 height="19"
@@ -486,7 +486,7 @@
       <div class="page_content">
 	<form id="share_location_form">
   <div id="share_location_form_info" class="info"></div>
-  <div id="share_location_form_spinner" style="text-align:center; display:none">
+  <div id="share_location_form_spinner" class="page_spinner">
     <img src="images/ajax-loader.gif"
 	 width="220"
 	 height="19"
@@ -521,22 +521,24 @@
       <div class="box_content">
 
 	<div id="my_contacts_button">
-	  <button  data-mini="true" onclick="select_contact();" style="margin-left:0px;">
+	  <button  data-mini="true" onclick="select_contact();" class="share_location_my_contacts_button">
 	    Select from My Contacts
 	  </button>
 	</div>
 
-	<div id="my_contacts_display" style="display:none; font-size:16px">
+	<div id="my_contacts_display" style="display:none" class="share_location_my_contacts_display">
 	  <div>
 	    <div class="my_contact_element">
 	      Email
 	    </div>
 	    <div id="my_contacts_email"
-		 class="my_contact_element"
-		 style="font-weight:bold; margin-left: 5px"></div>
+		 class="my_contact_element my_contact_value">
+	    </div>
 	    <div id="my_contacts_email_dropdown_div"
-		 style="float:left; margin-left: 5px; display:none">
-	      <select id="my_contacts_email_dropdown" name="my_contacts_email_dropdown"></select>
+		 class="my_contact_dropdown">
+	      <select id="my_contacts_email_dropdown"
+		      name="my_contacts_email_dropdown">
+	      </select>
 	    </div>
 	    <div style="clear:both"></div>
 	    <input type="hidden" name="my_contacts_email">
@@ -547,11 +549,13 @@
 	      Mobile
 	    </div>
 	    <div id="my_contacts_mobile"
-		 class="my_contact_element"
-		 style="font-weight:bold; margin-left: 5px;"></div>
+		 class="my_contact_element my_contact_value">
+	    </div>
 	    <div id="my_contacts_mobile_dropdown_div"
-		 style="float:left; margin-left: 5px; display:none">
-	      <select id="my_contacts_mobile_dropdown" name="my_contacts_mobile_dropdown"></select>
+		 class="my_contact_dropdown">
+	      <select id="my_contacts_mobile_dropdown"
+		      name="my_contacts_mobile_dropdown">
+	      </select>
 	    </div>
 	    <div style="clear:both"></div>
 	    <input type="hidden" name="my_contacts_mobile">
@@ -598,7 +602,6 @@
 		   name="share_to"
 		   id="share_to"
 		   placeholder="Share To"
-		   style="padding:5px"
 		   class="share_to_group"
 		   >
 	  </div>
@@ -607,7 +610,6 @@
 		   name="share_to"
 		   id="share_to"
 		   placeholder="Share To"
-		   style="padding:5px"
 		   class="share_to_group"
 		   >
 	  </div>
@@ -617,7 +619,7 @@
   </div>
   <div class="box_outer" id="share_with" style="display:none">
     <div class="box_frame">
-      <div class="box_content" style="font-size:18px; font-weight:bold; text-align:center">
+      <div class="box_content share_with">
 	Share with 
 	<span id="share_account_name">
 	</span>
@@ -631,7 +633,7 @@
     </div>
     <div class="box_frame">
       <div class="box_content">
-	<div style="width:28%; float:left; margin-left:3px; padding-top:3px">
+	<div class="share_duration_num">
 	  <input type="text"
 		 name="share_duration_number"
 		 id="share_duration_number"
@@ -639,7 +641,7 @@
 		 placeholder="number"
 		 >
 	</div>
-	<div style="width:68%; float:right; margin-right:3px">
+	<div class="share_duration_unit">
 	  <select name="share_duration_unit" data-mini="true">
 	    <option value="minute">minute</option>
 	    <option value="hour" selected>hour</option>
@@ -699,7 +701,7 @@
       <div class="page_content">
 	<form id="support_form">
   <div id="support_form_info" class="info"></div>
-  <div id="support_form_spinner" style="text-align:center; display:none">
+  <div id="support_form_spinner" class="page_spinner">
     <img src="images/ajax-loader.gif"
 	 width="220"
 	 height="19"
@@ -719,7 +721,7 @@
 	       name="support_form_problem"
 	       id="support_form_problem"
 	       placeholder="This is what happened..."
-	       style="padding:5px"
+	       class="support_input_text"
 	       >
 	<label for="support_form_reproduction"
 	       class="ui-hidden-accessible">
@@ -729,7 +731,7 @@
 	       name="support_form_reproduction"
 	       id="support_form_reproduction"
 	       placeholder="...when I did this"
-	       style="padding:5px"
+	       class="support_input_text"
 	       >
       </div>
     </div>
@@ -748,7 +750,7 @@
 	       name="support_form_feature"
 	       id="support_form_feature"
 	       placeholder="got a push notification when I got a new share"
-	       style="padding:5px"
+	       class="support_input_text"
 	       >
       </div>
     </div>
@@ -767,7 +769,7 @@
 	       name="support_form_cool_use"
 	       id="support_form_cool_use"
 	       placeholder="keep track of my parked car"
-	       style="padding:5px"
+	       class="support_input_text"
 	       >
       </div>
     </div>
@@ -785,7 +787,7 @@
 
   <input type="hidden" name="method" value="send_support">
   <input type="hidden" name="support_version">
-  <button style="background-color:#3eb1dd; color:white; text-shadow:0 0; font-weight:normal"
+  <button class="form_button"
 	  type="button"
 	  onclick="send_support()">Send</button>
 </form>
@@ -813,14 +815,15 @@
     </div>
     <div role="main" class="ui-content">
       <div class="page_content">
-	<div id="manage_form_spinner" style="text-align:center; display:none">
+	<div id="manage_form_spinner" class="page_spinner">
   <img src="images/ajax-loader.gif"
        width="220"
        height="19"
        >
 </div>
 <div id="manage_msg"
-     style="text-align:center; font-size:16px; font-weight:bold; color: purple; padding:5px">
+     class="share_manage_msg">
+
 </div>
 <div id="show_hide_expire" style="display:none">
   <label for="show_hide_expire_checkbox">
@@ -832,7 +835,7 @@
 	   >
   </label>
 </div>
-<table id="manage_table" style="min-height:250px">
+<table id="manage_table">
   <thead style="display:none">
     <tr>
       <th>Shared To</th>
