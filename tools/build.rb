@@ -137,17 +137,25 @@ end
 def build
   puts "Pull webapp repo"
   pull_webapp()
+
   require "#{Webapp_dir}/geopeers/geo.rb"
+  init()
+
   puts "Write Phonegap index.html"
   write_phonegap_index_html()
+
   puts "Create integrated/minified JS"
   js()
+
   puts "Create integrated/minified CSS"
   css()
+
   puts "Edit config XML"
   edit_config_xml()
+
   puts "Copy local assets"
   copy_local_assets()
+
   puts "Update Phonegap repo"
   update_phonegap_repo()
 
