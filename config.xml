@@ -2,7 +2,7 @@
 <widget xmlns   = "http://www.w3.org/ns/widgets"
 	xmlns:gap   = "http://phonegap.com/ns/1.0"
 	id          = "com.geopeers.app"
-        versionCode = "149"
+        versionCode = "150"
         version     = "0.9.0" >
   <name>
     Geopeers
@@ -23,6 +23,11 @@
   <gap:plugin name="org.apache.cordova.dialogs" />
   <gap:plugin name="com.millerjames01.sqlite-plugin" />
   <gap:plugin name="net.yoik.cordova.plugins.screenorientation" />
+
+  <gap:plugin name="org.apache.cordova.statusbar" />
+  <preference name="StatusBarOverlaysWebView" value="false" />
+  <preference name="StatusBarBackgroundColor" value="#10a8ab" />
+
   <gap:plugin name="nl.x-services.plugins.launchmyapp">
     <param name="URL_SCHEME" value="geopeers" />
   </gap:plugin>

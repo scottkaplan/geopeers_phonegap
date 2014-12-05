@@ -37,7 +37,7 @@
 	   height="245">
     </div>
     <div id="geopeers_config"
-	 build_id="149"
+	 build_id="150"
 	 version="0.7" >
     </div>
     
@@ -47,7 +47,6 @@
         <div class="header_content">
           <div id="header_title" class="overlap_div">
             <div class="header_title_text">Geopeers</div>
-	    <div id="geo_info" class="info"></div>
           </div>
           <div class="overlap_div">
             <div id="flying_pin" class="icon_div">
@@ -123,10 +122,14 @@
       </div>
 
       <div data-role="content" id="content">
-	<!-- map -->
-        <div id="map_canvas"
-             style="height:100%">       <!-- this has to be here or JQM will override -->
-        </div>
+	  <div class="info_box">
+	      <div id="geo_info">
+	      </div>
+	  </div>
+          <div id="map_canvas"
+               style="height:100%">       <!-- this has to be here or JQM will override -->
+          </div>
+	  </div>
       </div>
     </div>
 
