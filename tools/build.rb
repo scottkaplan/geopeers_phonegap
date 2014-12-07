@@ -167,5 +167,4 @@ def build
   puts "Done"
 end
 
-# build()
-update_phonegap_repo()
+build()
