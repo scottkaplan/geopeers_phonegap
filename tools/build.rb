@@ -88,8 +88,8 @@ def run_cmd cmd
 end
 
 def pull_webapp
-  remote_rep = 'https://scott:scott_kaplan@magtogo.gitsrc.com/git/geopeers.git'
-  cmd = "cd #{Webapp_dir}; rm -rf *; git clone #{remote_rep}"
+  github_rep = 'https://github.com/scottkaplan/geopeers'
+  cmd = "cd #{Webapp_dir}; rm -rf *; git clone #{github_rep}"
   run_cmd (cmd)
 end
 
@@ -167,5 +167,4 @@ def build
   puts "Done"
 end
 
-# build()
-update_phonegap_repo()
+build()
