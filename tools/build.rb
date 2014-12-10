@@ -77,6 +77,8 @@ def edit_config_xml
   build_id = get_build_id()
   puts build_id
   config_xml.sub! /versionCode\s*=\s*"\d+\"/, "versionCode = \"#{build_id}\""
+  version = get_version
+  config_xml.sub! /version\s*=\s*"\d+\"/, "version = \"#{version}\""
   File.open(config_xml_file, 'w') { |file| file.write(config_xml) }
 end
 
