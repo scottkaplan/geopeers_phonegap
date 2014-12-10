@@ -2,7 +2,7 @@
 <widget xmlns   = "http://www.w3.org/ns/widgets"
 	xmlns:gap   = "http://phonegap.com/ns/1.0"
 	id          = "com.geopeers.app"
-        versionCode = "159"
+        versionCode = "160"
         version     = "0.9.0" >
   <name>
     Geopeers
@@ -28,7 +28,7 @@
     <param name="URL_SCHEME" value="geopeers" />
   </gap:plugin>
   <gap:plugin name="org.apache.cordova.inappbrowser" />
-  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" />
+  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" version="0.3.5" />
 
   <access origin="*" />
 
