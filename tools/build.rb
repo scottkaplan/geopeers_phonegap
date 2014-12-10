@@ -79,7 +79,8 @@ def edit_config_xml
   config_xml.sub! /versionCode\s*=\s*"\d+"/, "versionCode = \"#{build_id}\""
   version = get_version
   puts version
-  config_xml.sub! /version\s*=\s*"[\.\d]+"/, "version = \"#{version}\""
+  # Search for d.d.d, not [.d]+ so we don't match the xml version attribute
+  config_xml.sub! /version\s*=\s*"\d+\.\d+\.\d+"/, "version = \"#{version}\""
   File.open(config_xml_file, 'w') { |file| file.write(config_xml) }
 end
 
