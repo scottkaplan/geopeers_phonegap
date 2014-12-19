@@ -38,7 +38,7 @@
     </div>
     
     <div id="geopeers_config"
-	 build_id="186"
+	 build_id="187"
 	 version="0.9"
 	 server="geopeers.com"
 	 >
@@ -71,24 +71,31 @@
 			  Share Location
 			</a>
 		      </li>
+
 		      <hr>
+
 		      <li>
 			<a onclick="manage_shares()">
 			  View Shares
 			</a>
 		      </li>
+
 		      <hr>
+
 		      <li>
 			<a onclick="display_registration()">
 			  Account Settings
 			</a>
 		      </li>
+
 		      <hr>
+
 		      <li>
 			<a onclick="display_support()">
 			  Make Us Better
 			</a>
 		      </li>
+
 		      <div id="native_app_download" style="display:none">
 			<hr>
 			<li>
@@ -97,6 +104,7 @@
 			  </a>
 			</li>
 		      </div>
+
 		      <div id="native_app_switch" style="display:none">
 			<hr>
 			<li>
@@ -105,6 +113,17 @@
 			  </a>
 			</li>
 		      </div>
+
+		      <div id="gps_cmd" style="display:none">
+			<hr>
+			<li>
+			  <a id="gps_cmd_menu_entry"
+			     onclick="background_gps.cmd('stop')">
+			    Stop GPS
+			  </a>
+			</li>
+		      </div>
+
 		      <div id="native_app_link">
 			<hr>
 			<li>
@@ -113,6 +132,7 @@
 			  </a>
 			</li>
 		      </div>
+
 		    </ul>
 		  </li>
 		</ul>
@@ -614,7 +634,7 @@
 	  </div>
 	</div>
 
-	<!-- input phase --> 
+	<!-- input phase: mobile --> 
 	<div id="share_to_mobile" style="display:none">
 	  <div style="display:inline-block">
 	    Mobile #: 
@@ -629,6 +649,7 @@
 	  </div>
 	</div>
 
+	<!-- input phase: email --> 
 	<div id="share_to_email" style="display:none">
 	  <div style="display:inline-block">
 	    Email:
