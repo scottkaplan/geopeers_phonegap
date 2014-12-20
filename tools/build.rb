@@ -42,7 +42,7 @@ def js
            'jquery.ui.map.js', 'markerwithlabel.js', 'md5.js',
            'jquery.dataTables.js', 'jquery-ui-timepicker-addon.js',
            'jstz.js', 'db.js', 'menu.js',
-#           'gps.js',
+           'gps.js',
 #           'geo.js',
           ]
   create_concat_file(dir, type, files)
@@ -81,7 +81,7 @@ def edit_config_xml
   version = get_version
   puts version
   # Search for d.d.d, not [.d]+ so we don't match the xml version attribute
-  config_xml.sub! /version\s*=\s*"\d+\.\d+\.\d+"/, "version = \"#{version}\""
+  config_xml.sub! /<widget\s+version\s*=\s*"\d+\.\d+\.\d+"/, "<widget version = \"#{version}\""
   File.open(config_xml_file, 'w') { |file| file.write(config_xml) }
 end
 
