@@ -57,6 +57,7 @@ def js
   write_file("#{dir}/#{master_map_filename}", source_map)
 
   FileUtils.cp("#{dir}/geo.js", "#{Phonegap_dir}/#{type}")
+  FileUtils.cp("#{dir}/gps.js", "#{Phonegap_dir}/#{type}")
 end
 
 def css

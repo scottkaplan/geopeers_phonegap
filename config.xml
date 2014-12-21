@@ -3,7 +3,7 @@
    xmlns   = "http://www.w3.org/ns/widgets"
    xmlns:gap   = "http://phonegap.com/ns/1.0"
    id          = "com.geopeers.app"
-   versionCode = "201" >
+   versionCode = "202" >
 
   <name>
     Geopeers
