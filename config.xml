@@ -3,7 +3,7 @@
    xmlns   = "http://www.w3.org/ns/widgets"
    xmlns:gap   = "http://phonegap.com/ns/1.0"
    id          = "com.geopeers.app"
-   versionCode = "200" >
+   versionCode = "201" >
 
   <name>
     Geopeers
@@ -33,6 +33,7 @@
   </gap:plugin>
   <gap:plugin name="org.apache.cordova.inappbrowser" />
   <gap:plugin name="org.transistorsoft.cordova.background-geolocation" />
+  <gap:plugin name="org.apache.cordova.battery-status" />
 
   <access origin="*" />
 
